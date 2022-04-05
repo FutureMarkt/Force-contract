@@ -57,4 +57,25 @@ contract Forsage {
       }
   }
 
+  function updateX3(uint lvl) external view returns (address) {
+    address _parent = getActivateParent(msg.sender, lvl);
+    console.log('Update');
+    return _parent;
+  }
+
+  function getActivateParent(address _child, uint _lvl) internal view returns (address response) {
+        address __parent = parent[_child];
+        while(true) {
+            if (_isActive(__parent, _lvl)) {
+                return __parent;
+            } else {
+                __parent =parent[__parent];
+            }
+        }
+    }
+
+    function _isActive(address _address, uint _lvl) internal view returns(bool) {
+        return activate[_address][_lvl];
+    }
+
 }

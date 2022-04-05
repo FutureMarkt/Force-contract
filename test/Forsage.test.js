@@ -9,6 +9,10 @@ describe("Forsage", function(){
     const Forsage = await ethers.getContractFactory("Forsage", acc1)
     forsage = await Forsage.deploy(acc1.address) // send transaction
     await forsage.deployed() // transaction done
+
+    // set accounts
+    await forsage.connect(acc2).registration(acc1.address)
+    await forsage.connect(acc3).registration(acc1.address)
   })
 
   it ("should be deployed", async function(){
@@ -20,17 +24,15 @@ describe("Forsage", function(){
     for (var i = 0; i < 12; i++) {
       expect(await forsage.activate(acc1.address,i)).to.equal(true);
     }
-
   })
 
-  it ("Registration test", async function(){
-    await forsage.connect(acc2).registration(acc1.address)
-    await forsage.connect(acc3).registration(acc1.address)
-    const price = await forsage.firstPrice()
-    console.log(price)
+  it ("Update X3 test", async function(){
+    const parent = await forsage.connect(acc2).updateX3(1)
+    console.log("First account", acc1.address)
+    console.log("Parent is", parent)
   })
 
-  it ("Buy test", async function(){    
+  it ("Buy test", async function(){
     await forsage.connect(acc2).registration(acc1.address)
     await forsage.connect(acc2).buy(0)
   })
