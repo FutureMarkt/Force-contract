@@ -25,6 +25,14 @@ contract Forsage {
   }
   mapping(uint => Product) public products;
 
+  struct structX3 {
+    address[] childsLvl1;
+    uint slot;
+    uint lastChild;
+  }
+
+  mapping (address => mapping(uint => structX3)) matrixX3; // user -> lvl -> structX3
+
   constructor(address admin) {
       /// Set products
       for (uint i = 0; i < 12; i++) {
