@@ -68,12 +68,22 @@ contract Forsage {
   function updateX3(uint lvl) external returns (address) {
     address _parent = getActivateParent(msg.sender, lvl);
 
+    // Push new child
+    matrixX3[_parent][lvl].childsLvl1.push(msg.sender);
+
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
     uint _lastChild = _parentStruct.lastChild;
     _lastChild = _lastChild % 3;
     console.log("mod lastChild", _lastChild);
     _parentStruct.lastChild++;
+
+    // Update slot
+    if (_lastChild == 2) {
+      _parentStruct.slot++;
+      // add new spot to parent
+    }
+
     return _parent;
   }
 
