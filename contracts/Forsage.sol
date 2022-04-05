@@ -31,7 +31,7 @@ contract Forsage {
     uint lastChild;
   }
 
-  mapping (address => mapping(uint => structX3)) matrixX3; // user -> lvl -> structX3
+  mapping (address => mapping(uint => structX3)) public matrixX3; // user -> lvl -> structX3
 
   constructor(address admin) {
       /// Set products
@@ -65,9 +65,15 @@ contract Forsage {
       }
   }
 
-  function updateX3(uint lvl) external view returns (address) {
+  function updateX3(uint lvl) external returns (address) {
     address _parent = getActivateParent(msg.sender, lvl);
-    console.log('Update');
+
+    // Increment lastChild
+    structX3 storage _parentStruct = matrixX3[_parent][lvl];
+    uint _lastChild = _parentStruct.lastChild;
+    _lastChild = _lastChild % 3;
+    console.log("mod lastChild", _lastChild);
+    _parentStruct.lastChild++;
     return _parent;
   }
 
