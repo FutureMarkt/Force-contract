@@ -70,6 +70,7 @@ contract Forsage {
 
   function buy(uint lvl) isRegistred external view {
       require(activate[msg.sender][lvl] == false, "This level is already activated");
+      // Check if there is enough money
 
       for (uint i = 0; i < lvl; i++) {
           require(activate[msg.sender][i] == true, "Previous level not activated");
@@ -77,11 +78,16 @@ contract Forsage {
 
       if (products[lvl] == Product.x3) {
           // updateX3(lvl);
+      } else {
+        // updateX4(lvl);
       }
   }
 
   function updateX3(address _child, uint lvl) public returns (address) {
     address _parent = getActivateParent(_child, lvl);
+
+    // Activate new lvl
+    active[_child]
 
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
@@ -109,10 +115,24 @@ contract Forsage {
     if (_lastChild == 0) {
       //Check autoUpgrade
       if (users[_parent].autoUpgrade) {
-        // transfer to smart contract
-        _parentStruct.frozenMoney = firstPrice * 2 ** lvl;
+        // transfer token to me
+        // transfer token to smart contract
       } else {
-        // transfer to parent
+        _parentStruct.frozenMoney += firstPrice * 2 ** lvl;
+        // transfer to smart contract firstPrice * 2 ** lvl
+      }
+    }
+
+    // Second Child
+    if (_lastChild == 1) {
+      //Check autoUpgrade
+      if (users[_parent].autoUpgrade) {
+        // transfer token to me
+        // transfer token to smart contract
+      } else {
+        _parentStruct.frozenMoney -= firstPrice * 2 ** lvl;
+        // transfer money back
+        // bue next lvl buy[lvl + 1]
       }
     }
 
@@ -144,6 +164,7 @@ contract Forsage {
     }
 
     function changeAutoUpgrade(bool flag) external {
+      // check frozen money
       User storage cUser = users[msg.sender];
       cUser.autoUpgrade = flag;
       console.log('Changed auto upgrade', users[msg.sender].autoUpgrade);
