@@ -39,6 +39,12 @@ contract Forsage {
           products[i] = ((i + 1) % 3 == 0) ? Product.x4 : Product.x3;
       }
 
+      /// Set products prices
+      for (uint j = 0; j < 12; j++) {
+          prices.push(firstPrice * 2 ** j);
+          console.log(prices[j]);
+      }
+
       /// Set first User
       parent[admin] = admin;
       for (uint i = 0; i < 12; i++) {
@@ -70,6 +76,9 @@ contract Forsage {
 
     // Push new child
     matrixX3[_parent][lvl].childsLvl1.push(msg.sender);
+    console.log("My address", msg.sender);
+    uint length = matrixX3[_parent][lvl].childsLvl1.length - 1;
+    console.log("Push", matrixX3[_parent][lvl].childsLvl1[length]);
 
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
