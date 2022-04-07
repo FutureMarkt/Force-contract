@@ -30,10 +30,10 @@ describe("Forsage", function(){
 
   it ("Update X3 test", async function(){
     await forsage.changeAutoReCycle(true)
-    const parent = await forsage.connect(acc2).updateX3(0)
-    await forsage.connect(acc3).updateX3(0)
-    await forsage.connect(acc4).updateX3(0)
-    await forsage.connect(acc5).updateX3(0)
+    const parent = await forsage.connect(acc2).updateX3(acc2.address,0)
+    await forsage.connect(acc3).updateX3(acc3.address,0)
+    await forsage.connect(acc4).updateX3(acc4.address,0)
+    await forsage.connect(acc5).updateX3(acc5.address,0)
   })
 
   it ("Buy test", async function(){

@@ -78,8 +78,8 @@ contract Forsage {
       }
   }
 
-  function updateX3(uint lvl) external returns (address) {
-    address _parent = getActivateParent(msg.sender, lvl);
+  function updateX3(address _child, uint lvl) public returns (address) {
+    address _parent = getActivateParent(_child, lvl);
 
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
@@ -93,15 +93,21 @@ contract Forsage {
     if (_lastChild == 2) {
       // Check autorecycle
       if (users[_parent].autoReCycle) {
+        // transfer token to me
+        // transfer token to smart contract
+        console.log('Autorecycle1');
+      } else {
+
+        // transfer token to parent
+        updateX3(_parent, lvl);
         console.log('Autorecycle');
       }
       _parentStruct.slot++;
-      // transfer token to parent
 
     }
 
     // Push new child
-    matrixX3[_parent][lvl].childsLvl1.push(msg.sender);
+    matrixX3[_parent][lvl].childsLvl1.push(_child);
 
     return _parent;
   }
