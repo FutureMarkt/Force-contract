@@ -16,7 +16,7 @@ contract Forsage {
     bool autoUpgrade;
   }
 
-  User[] public users;
+  mapping(address => User) public users;
 
   mapping(address => address) public parent;
   mapping(address => address[]) public childs;
@@ -53,7 +53,7 @@ contract Forsage {
 
       /// Set first User
       parent[admin] = admin;
-      users.push(User(false,false));
+      users[msg.sender] = User(false,false);
       for (uint i = 0; i < 12; i++) {
           activate[admin][i] = true;
       }
@@ -92,7 +92,9 @@ contract Forsage {
     // Last Child
     if (_lastChild == 2) {
       // Check autorecycle
-      /* if () */
+      if (users[_parent].autoReCycle) {
+        console.log('Autorecycle');
+      }
       _parentStruct.slot++;
       // transfer token to parent
 
@@ -100,12 +102,6 @@ contract Forsage {
 
     // Push new child
     matrixX3[_parent][lvl].childsLvl1.push(msg.sender);
-
-    // Update slot
-    if (_lastChild == 2) {
-      _parentStruct.slot++;
-      // add new spot to parent
-    }
 
     return _parent;
   }
@@ -123,6 +119,18 @@ contract Forsage {
 
     function _isActive(address _address, uint _lvl) internal view returns(bool) {
         return activate[_address][_lvl];
+    }
+
+    function changeAutoReCycle(bool flag) external {
+      User storage cUser = users[msg.sender];
+      cUser.autoReCycle = flag;
+      console.log('Changed auto recycle', users[msg.sender].autoReCycle);
+    }
+
+    function changeAutoUpgrade(bool flag) external {
+      User storage cUser = users[msg.sender];
+      cUser.autoUpgrade = flag;
+      console.log('Changed auto upgrade', users[msg.sender].autoUpgrade);
     }
 
 }

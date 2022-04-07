@@ -29,6 +29,7 @@ describe("Forsage", function(){
   })
 
   it ("Update X3 test", async function(){
+    await forsage.changeAutoReCycle(true)
     const parent = await forsage.connect(acc2).updateX3(0)
     await forsage.connect(acc3).updateX3(0)
     await forsage.connect(acc4).updateX3(0)
@@ -38,5 +39,10 @@ describe("Forsage", function(){
   it ("Buy test", async function(){
     await forsage.connect(acc2).registration(acc1.address)
     await forsage.connect(acc2).buy(0)
+  })
+
+  it ("Change User settings", async function(){
+    await forsage.changeAutoReCycle(true)
+    await forsage.changeAutoUpgrade(true)
   })
 })
