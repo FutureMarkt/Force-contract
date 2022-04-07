@@ -17,7 +17,6 @@ contract Forsage {
   }
 
   mapping(address => User) public users;
-
   mapping(address => address) public parent;
   mapping(address => address[]) public childs;
 
@@ -32,13 +31,16 @@ contract Forsage {
   }
   mapping(uint => Product) public products;
 
+  mapping (address => mapping(uint => structX3)) public matrixX3; // user -> lvl -> structX3
+
   struct structX3 {
     address[] childsLvl1;
     uint slot;
     uint lastChild;
+    uint frozenMoneyX3;
   }
 
-  mapping (address => mapping(uint => structX3)) public matrixX3; // user -> lvl -> structX3
+
 
   constructor(address admin) {
       /// Set products
@@ -95,15 +97,23 @@ contract Forsage {
       if (users[_parent].autoReCycle) {
         // transfer token to me
         // transfer token to smart contract
-        console.log('Autorecycle1');
       } else {
 
         // transfer token to parent
         updateX3(_parent, lvl);
-        console.log('Autorecycle');
       }
       _parentStruct.slot++;
+    }
 
+    // First Child
+    if (_lastChild == 0) {
+      //Check autoUpgrade
+      if (users[_parent].autoUpgrade) {
+        // transfer to smart contract
+        _parentStruct.frozenMoney = firstPrice * 2 ** lvl;
+      } else {
+        // transfer to parent
+      }
     }
 
     // Push new child
