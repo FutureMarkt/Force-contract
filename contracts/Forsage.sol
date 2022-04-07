@@ -11,6 +11,13 @@ contract Forsage {
     _;
   }
 
+  struct User {
+    bool autoReCycle;
+    bool autoUpgrade;
+  }
+
+  User[] public users;
+
   mapping(address => address) public parent;
   mapping(address => address[]) public childs;
 
@@ -42,11 +49,11 @@ contract Forsage {
       /// Set products prices
       for (uint j = 0; j < 12; j++) {
           prices.push(firstPrice * 2 ** j);
-          console.log(prices[j]);
       }
 
       /// Set first User
       parent[admin] = admin;
+      users.push(User(false,false));
       for (uint i = 0; i < 12; i++) {
           activate[admin][i] = true;
       }
@@ -74,18 +81,25 @@ contract Forsage {
   function updateX3(uint lvl) external returns (address) {
     address _parent = getActivateParent(msg.sender, lvl);
 
-    // Push new child
-    matrixX3[_parent][lvl].childsLvl1.push(msg.sender);
-    console.log("My address", msg.sender);
-    uint length = matrixX3[_parent][lvl].childsLvl1.length - 1;
-    console.log("Push", matrixX3[_parent][lvl].childsLvl1[length]);
-
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
     uint _lastChild = _parentStruct.lastChild;
     _lastChild = _lastChild % 3;
     console.log("mod lastChild", _lastChild);
     _parentStruct.lastChild++;
+
+
+    // Last Child
+    if (_lastChild == 2) {
+      // Check autorecycle
+      /* if () */
+      _parentStruct.slot++;
+      // transfer token to parent
+
+    }
+
+    // Push new child
+    matrixX3[_parent][lvl].childsLvl1.push(msg.sender);
 
     // Update slot
     if (_lastChild == 2) {
