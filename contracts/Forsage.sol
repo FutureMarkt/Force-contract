@@ -3,6 +3,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Forsage {
 
@@ -40,9 +41,9 @@ contract Forsage {
     uint frozenMoneyX3;
   }
 
+  IERC20 public tokenMFS;
 
-
-  constructor(address admin) {
+  constructor(address admin, IERC20 _token) {
       /// Set products
       for (uint i = 0; i < 12; i++) {
           products[i] = ((i + 1) % 3 == 0) ? Product.x4 : Product.x3;
@@ -59,6 +60,10 @@ contract Forsage {
       for (uint i = 0; i < 12; i++) {
           activate[admin][i] = true;
       }
+
+
+      /// Set token
+      tokenMFS = _token;
   }
 
   function registration(address ref) external {

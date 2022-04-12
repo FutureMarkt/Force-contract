@@ -4,15 +4,18 @@ const { ethers } = require("hardhat")
 describe("Forsage", function(){
   let acc1, acc2, acc3, acc4, acc5
   let forsage
+  let mfs
   beforeEach(async function(){
     [acc1, acc2, acc3, acc4, acc5] = await ethers.getSigners()
+
+    // Deploy token contract
     const MFS = await ethers.getContractFactory("MFS", acc1)
-    mfs = await MFS.deploy(acc1.address) // send transaction
+    mfs = await MFS.deploy() // send transaction
     await mfs.deployed() // transaction done
 
-
+    // Deploy system contract
     const Forsage = await ethers.getContractFactory("Forsage", acc1)
-    forsage = await Forsage.deploy(acc1.address) // send transaction
+    forsage = await Forsage.deploy(acc1.address, mfs.address) // send transaction
     await forsage.deployed() // transaction done
 
     // set accounts
@@ -49,5 +52,10 @@ describe("Forsage", function(){
   it ("Change User settings", async function(){
     await forsage.changeAutoReCycle(true)
     await forsage.changeAutoUpgrade(true)
+  })
+
+  it ("is token set", async function(){
+    const token = await forsage.tokenMFS()
+    expect(token).to.be.properAddress;
   })
 })
