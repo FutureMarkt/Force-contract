@@ -6,6 +6,11 @@ describe("Forsage", function(){
   let forsage
   beforeEach(async function(){
     [acc1, acc2, acc3, acc4, acc5] = await ethers.getSigners()
+    const MFS = await ethers.getContractFactory("MFS", acc1)
+    mfs = await MFS.deploy(acc1.address) // send transaction
+    await mfs.deployed() // transaction done
+
+
     const Forsage = await ethers.getContractFactory("Forsage", acc1)
     forsage = await Forsage.deploy(acc1.address) // send transaction
     await forsage.deployed() // transaction done

@@ -92,9 +92,9 @@ contract Forsage {
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
     uint _lastChild = _parentStruct.lastChild;
+    _parentStruct.lastChild++;
     _lastChild = _lastChild % 3;
     console.log("mod lastChild", _lastChild);
-    _parentStruct.lastChild++;
 
 
     // Last Child
