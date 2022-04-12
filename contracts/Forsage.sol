@@ -87,7 +87,7 @@ contract Forsage {
     address _parent = getActivateParent(_child, lvl);
 
     // Activate new lvl
-    active[_child]
+    //active[_child]
 
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
@@ -118,7 +118,7 @@ contract Forsage {
         // transfer token to me
         // transfer token to smart contract
       } else {
-        _parentStruct.frozenMoney += firstPrice * 2 ** lvl;
+        _parentStruct.frozenMoneyX3 += firstPrice * 2 ** lvl;
         // transfer to smart contract firstPrice * 2 ** lvl
       }
     }
@@ -130,7 +130,7 @@ contract Forsage {
         // transfer token to me
         // transfer token to smart contract
       } else {
-        _parentStruct.frozenMoney -= firstPrice * 2 ** lvl;
+        _parentStruct.frozenMoneyX3 -= firstPrice * 2 ** lvl;
         // transfer money back
         // bue next lvl buy[lvl + 1]
       }

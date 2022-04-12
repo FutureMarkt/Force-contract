@@ -1,16 +1,15 @@
-// SPDX-License-Identifier: GPL-3.0
-
-pragma solidity >=0.7.0 <0.9.0;
-
-import "hardhat/console.sol";
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MFS is ERC20, ERC20Detailed {
-
-  constructor(uint256 initialSupply) ERC20Detailed("Gold", "GLD", 18) public {
-        _mint(msg.sender, initialSupply);
+contract MFS is ERC20, Ownable {
+    constructor() ERC20("MFS", "MFS") {
+        _mint(msg.sender, 25000 * 10 ** decimals());
     }
 
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
+    }
 }
