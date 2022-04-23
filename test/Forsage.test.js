@@ -18,6 +18,11 @@ describe("Forsage", function(){
     forsage = await Forsage.deploy(acc1.address, mfs.address) // send transaction
     await forsage.deployed() // transaction done
 
+    await mfs.transfer(acc2.address, ethers.utils.parseEther('100'))
+    await mfs.transfer(acc3.address, ethers.utils.parseEther('100'))
+    await mfs.transfer(acc4.address, ethers.utils.parseEther('100'))
+    await mfs.transfer(acc5.address, ethers.utils.parseEther('100'))
+
     // set accounts
     await forsage.connect(acc2).registration(acc1.address)
     await forsage.connect(acc3).registration(acc1.address)
@@ -57,5 +62,10 @@ describe("Forsage", function(){
   it ("is token set", async function(){
     const token = await forsage.tokenMFS()
     expect(token).to.be.properAddress;
+  })
+
+  it ("balance of sender", async function(){
+    const balance = await mfs.balanceOf(acc1.address)
+    expect(balance).to.equal(ethers.utils.parseEther('24600'))
   })
 })

@@ -88,11 +88,11 @@ contract Forsage {
       }
   }
 
-  function updateX3(address _child, uint lvl) public returns (address) {
+  function updateX3(address _child, uint lvl) isRegistred public returns (address) {
     address _parent = getActivateParent(_child, lvl);
 
     // Activate new lvl
-    //active[_child]
+    activate[msg.sender][lvl] = true;
 
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
