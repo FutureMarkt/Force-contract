@@ -4,24 +4,9 @@ pragma solidity >=0.7.0 <0.9.0;
 
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./Referal.sol";
 
-contract Forsage {
-
-  modifier isRegistred {
-    require(parent[msg.sender] != address(0), "You are not registred");
-    _;
-  }
-
-  struct User {
-    bool autoReCycle;
-    bool autoUpgrade;
-  }
-
-  mapping(address => User) public users;
-  mapping(address => address) public parent;
-  mapping(address => address[]) public childs;
-
-  mapping(address => mapping(uint => bool)) public activate; // user -> lvl -> active
+contract Forsage is Referal {  
 
   uint[] public prices;
   uint public firstPrice = 5 * 10 ** 18;
@@ -43,7 +28,7 @@ contract Forsage {
 
   IERC20 public tokenMFS;
 
-  constructor(address admin, IERC20 _token) {
+  constructor(IERC20 _token, address admin) Referal(admin) {
       /// Set products
       for (uint i = 0; i < 12; i++) {
           products[i] = ((i + 1) % 3 == 0) ? Product.x4 : Product.x3;
@@ -54,23 +39,8 @@ contract Forsage {
           prices.push(firstPrice * 2 ** j);
       }
 
-      /// Set first User
-      parent[admin] = admin;
-      users[msg.sender] = User(false,false);
-      for (uint i = 0; i < 12; i++) {
-          activate[admin][i] = true;
-      }
-
-
       /// Set token
       tokenMFS = _token;
-  }
-
-  function registration(address ref) external {
-      require(msg.sender != ref, "You can`t be referal");
-
-      parent[msg.sender] = ref;
-      childs[ref].push(msg.sender);
   }
 
   function buy(uint lvl) isRegistred external view {
@@ -99,7 +69,7 @@ contract Forsage {
     uint _lastChild = _parentStruct.lastChild;
     _parentStruct.lastChild++;
     _lastChild = _lastChild % 3;
-    console.log("mod lastChild", _lastChild);
+    console.log("Last Child", _lastChild);
 
 
     // Last Child
@@ -111,7 +81,7 @@ contract Forsage {
       } else {
 
         // transfer token to parent
-        updateX3(_parent, lvl);
+        updateX3(_parent, lvl); // update parents product
       }
       _parentStruct.slot++;
     }
@@ -123,8 +93,9 @@ contract Forsage {
         // transfer token to me
         // transfer token to smart contract
       } else {
-        _parentStruct.frozenMoneyX3 += firstPrice * 2 ** lvl;
-        // transfer to smart contract firstPrice * 2 ** lvl
+        uint _frozen = firstPrice * 2 ** lvl;
+        _parentStruct.frozenMoneyX3 += _frozen;
+        tokenMFS.transferFrom(msg.sender, address(this), _frozen);
       }
     }
 
@@ -148,31 +119,31 @@ contract Forsage {
   }
 
   function getActivateParent(address _child, uint _lvl) internal view returns (address response) {
-        address __parent = parent[_child];
-        while(true) {
-            if (_isActive(__parent, _lvl)) {
-                return __parent;
-            } else {
-                __parent =parent[__parent];
-            }
-        }
-    }
+      address __parent = parent[_child];
+      while(true) {
+          if (_isActive(__parent, _lvl)) {
+              return __parent;
+          } else {
+              __parent =parent[__parent];
+          }
+      }
+  }
 
-    function _isActive(address _address, uint _lvl) internal view returns(bool) {
-        return activate[_address][_lvl];
-    }
+  function _isActive(address _address, uint _lvl) internal view returns(bool) {
+      return activate[_address][_lvl];
+  }
 
-    function changeAutoReCycle(bool flag) external {
-      User storage cUser = users[msg.sender];
-      cUser.autoReCycle = flag;
-      console.log('Changed auto recycle', users[msg.sender].autoReCycle);
-    }
+  function changeAutoReCycle(bool flag) external {
+    User storage cUser = users[msg.sender];
+    cUser.autoReCycle = flag;
+    console.log('Changed auto recycle', users[msg.sender].autoReCycle);
+  }
 
-    function changeAutoUpgrade(bool flag) external {
-      // check frozen money
-      User storage cUser = users[msg.sender];
-      cUser.autoUpgrade = flag;
-      console.log('Changed auto upgrade', users[msg.sender].autoUpgrade);
-    }
+  function changeAutoUpgrade(bool flag) external {
+    // check frozen money
+    User storage cUser = users[msg.sender];
+    cUser.autoUpgrade = flag;
+    console.log('Changed auto upgrade', users[msg.sender].autoUpgrade);
+  }
 
 }
