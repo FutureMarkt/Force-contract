@@ -23,7 +23,7 @@ contract Forsage is Referal {
     address[] childsLvl1;
     uint slot;
     uint lastChild;
-    uint frozenMoneyX3;
+    uint frozenMoneyS3;
   }
 
   IERC20 public tokenMFS;
@@ -43,7 +43,7 @@ contract Forsage is Referal {
       tokenMFS = _token;
   }
 
-  function buy(uint lvl) isRegistred external view {
+  function buy(uint lvl) isRegistred external {
       require(activate[msg.sender][lvl] == false, "This level is already activated");
       // Check if there is enough money
 
@@ -52,17 +52,17 @@ contract Forsage is Referal {
       }
 
       if (products[lvl] == Product.x3) {
-          // updateX3(lvl);
+          updateX3(msg.sender, lvl);
       } else {
         // updateX4(lvl);
       }
+
+      // Activate new lvl
+      activate[msg.sender][lvl] = true;
   }
 
   function updateX3(address _child, uint lvl) isRegistred public returns (address) {
     address _parent = getActivateParent(_child, lvl);
-
-    // Activate new lvl
-    activate[msg.sender][lvl] = true;
 
     // Increment lastChild
     structX3 storage _parentStruct = matrixX3[_parent][lvl];
@@ -71,16 +71,18 @@ contract Forsage is Referal {
     _lastChild = _lastChild % 3;
     console.log("Last Child", _lastChild);
 
+    // Get price
+    uint _price = prices[lvl];
+    console.log('Price', _price);
+
 
     // Last Child
     if (_lastChild == 2) {
       // Check autorecycle
       if (users[_parent].autoReCycle) {
-        // transfer token to me
-        // transfer token to smart contract
+        _sendDevisionMoney(_parent, _price, 40);
       } else {
-
-        // transfer token to parent
+        tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
         updateX3(_parent, lvl); // update parents product
       }
       _parentStruct.slot++;
@@ -90,12 +92,10 @@ contract Forsage is Referal {
     if (_lastChild == 0) {
       //Check autoUpgrade
       if (users[_parent].autoUpgrade) {
-        // transfer token to me
-        // transfer token to smart contract
+        _sendDevisionMoney(_parent, _price, 25);
       } else {
-        uint _frozen = firstPrice * 2 ** lvl;
-        _parentStruct.frozenMoneyX3 += _frozen;
-        tokenMFS.transferFrom(msg.sender, address(this), _frozen);
+        _parentStruct.frozenMoneyS3 += _price;
+        tokenMFS.transferFrom(msg.sender, address(this), _price);
       }
     }
 
@@ -103,10 +103,9 @@ contract Forsage is Referal {
     if (_lastChild == 1) {
       //Check autoUpgrade
       if (users[_parent].autoUpgrade) {
-        // transfer token to me
-        // transfer token to smart contract
+        _sendDevisionMoney(_parent, _price, 25);
       } else {
-        _parentStruct.frozenMoneyX3 -= firstPrice * 2 ** lvl;
+        _parentStruct.frozenMoneyS3 -= firstPrice * 2 ** lvl;
         // transfer money back
         // bue next lvl buy[lvl + 1]
       }
@@ -116,6 +115,12 @@ contract Forsage is Referal {
     matrixX3[_parent][lvl].childsLvl1.push(_child);
 
     return _parent;
+  }
+
+  function _sendDevisionMoney(address _parent, uint _price, uint _percent) internal {
+    uint amoutSC = _price * _percent / 100;
+    tokenMFS.transferFrom(msg.sender, _parent, (_price - amoutSC)); // transfer token to me
+    tokenMFS.transferFrom(msg.sender, address(this), amoutSC); // transfer token to smart contract
   }
 
   function getActivateParent(address _child, uint _lvl) internal view returns (address response) {
@@ -140,7 +145,7 @@ contract Forsage is Referal {
   }
 
   function changeAutoUpgrade(bool flag) external {
-    // check frozen money
+    // check frozen money. If froaen not empty - 25 to sc / 75 to msg.sender
     User storage cUser = users[msg.sender];
     cUser.autoUpgrade = flag;
     console.log('Changed auto upgrade', users[msg.sender].autoUpgrade);
