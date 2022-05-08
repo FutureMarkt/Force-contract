@@ -105,9 +105,10 @@ contract Forsage is Referal {
       if (users[_parent].autoUpgrade) {
         _sendDevisionMoney(_parent, _price, 25);
       } else {
-        _parentStruct.frozenMoneyS3 -= firstPrice * 2 ** lvl;
-        // transfer money back
-        // bue next lvl buy[lvl + 1]
+        _parentStruct.frozenMoneyS3 -= _price;
+        tokenMFS.transfer(_parent, _price); // transfer frozen money
+        tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer money to parent
+        buy((lvl + 1)); // bue next lvl buy[lvl + 1]
       }
     }
 
