@@ -2,11 +2,11 @@ const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
 describe("Forsage", function(){
-  let acc1, acc2, acc3, acc4, acc5
+  let acc1, acc2, acc3, acc4, acc5, acc6, acc7, acc8
   let forsage
   let mfs
   beforeEach(async function(){
-    [acc1, acc2, acc3, acc4, acc5] = await ethers.getSigners()
+    [acc1, acc2, acc3, acc4, acc5, acc6, acc7, acc8] = await ethers.getSigners()
 
     // Deploy token contract
     const MFS = await ethers.getContractFactory("MFS", acc1)
@@ -48,6 +48,16 @@ describe("Forsage", function(){
     expect(adminParent).to.equal(acc1.address)
     expect(acc2Parent).to.equal(acc1.address)
     expect(acc4Parent).to.equal(acc2.address)
+  })
+
+  it ("Get childs", async function(){
+    await forsage.connect(acc5).registration(acc1.address)
+    await forsage.connect(acc6).registration(acc1.address)
+    await forsage.connect(acc7).registration(acc1.address)
+    await forsage.connect(acc8).registration(acc1.address)
+    const adminChilds = await forsage.getChilds()
+    expect(adminChilds[4]).to.equal(acc7.address)
+    expect(adminChilds[5]).to.equal(acc8.address)
   })
 
   // it ("Update X3 test", async function(){
