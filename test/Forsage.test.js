@@ -73,11 +73,19 @@ describe("Forsage", function(){
   //   await forsage.connect(acc2).buy(0)
   // })
 
-  // it ("Change User settings", async function(){
-  //   await forsage.changeAutoReCycle(true)
-  //   await forsage.changeAutoUpgrade(true)
-  // })
-  //
+  it ("Change User settings", async function(){
+    let user = await forsage.users(acc1.address)
+    expect(user.autoReCycle).to.equal(false)
+    expect(user.autoUpgrade).to.equal(false)
+    
+    await forsage.changeAutoReCycle(true)
+    await forsage.changeAutoUpgrade(true)
+
+    user = await forsage.users(acc1.address)
+    expect(user.autoReCycle).to.equal(true)
+    expect(user.autoUpgrade).to.equal(true)
+  })
+
   // it ("is token set", async function(){
   //   const token = await forsage.tokenMFS()
   //   expect(token).to.be.properAddress;

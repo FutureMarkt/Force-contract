@@ -17,9 +17,9 @@ contract Forsage is Referal {
   }
   mapping(uint => Product) public products;
 
-  mapping (address => mapping(uint => structX3)) public matrixX3; // user -> lvl -> structX3
+  mapping (address => mapping(uint => structS3)) public matrixS3; // user -> lvl -> structS3
 
-  struct structX3 {
+  struct structS3 {
     address[] childsLvl1;
     uint slot;
     uint lastChild;
@@ -43,7 +43,7 @@ contract Forsage is Referal {
       tokenMFS = _token;
   }
 
-  function buy(uint lvl) isRegistred external {
+  function buy(uint lvl) isRegistred public {
       require(activate[msg.sender][lvl] == false, "This level is already activated");
       // Check if there is enough money
 
@@ -65,7 +65,7 @@ contract Forsage is Referal {
     address _parent = getActivateParent(_child, lvl);
 
     // Increment lastChild
-    structX3 storage _parentStruct = matrixX3[_parent][lvl];
+    structS3 storage _parentStruct = matrixS3[_parent][lvl];
     uint _lastChild = _parentStruct.lastChild;
     _parentStruct.lastChild++;
     _lastChild = _lastChild % 3;
@@ -113,7 +113,7 @@ contract Forsage is Referal {
     }
 
     // Push new child
-    matrixX3[_parent][lvl].childsLvl1.push(_child);
+    matrixS3[_parent][lvl].childsLvl1.push(_child);
 
     return _parent;
   }
@@ -147,6 +147,16 @@ contract Forsage is Referal {
 
   function changeAutoUpgrade(bool flag) external {
     // check frozen money. If froaen not empty - 25 to sc / 75 to msg.sender
+    uint _price;
+    for (uint i =0; i < 12; i++){
+      structS3 storage _structure = matrixS3[msg.sender][i];
+      if (_structure.frozenMoneyS3 != 0) {
+        _price = prices[i];
+        _structure.frozenMoneyS3 = 0;
+        _sendDevisionMoney(msg.sender, _price, 25);
+      }
+    }
+
     User storage cUser = users[msg.sender];
     cUser.autoUpgrade = flag;
     console.log('Changed auto upgrade', users[msg.sender].autoUpgrade);
