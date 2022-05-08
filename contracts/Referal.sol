@@ -32,11 +32,19 @@ contract Referal {
       }
   }
 
-  function registration(address ref) external {
-      require(msg.sender != ref, "You can`t be referal");
+  function registration(address _parent) external {
+      require(msg.sender != _parent, "You can`t be referal");
 
-      parent[msg.sender] = ref;
-      childs[ref].push(msg.sender);
+      parent[msg.sender] = _parent;
+      childs[_parent].push(msg.sender);
+  }
+
+  function getParent() view external returns(address) {
+    return parent[msg.sender];
+  }
+
+  function getChilds() view external returns(address[] memory) {
+    return childs[msg.sender];
   }
 
 }

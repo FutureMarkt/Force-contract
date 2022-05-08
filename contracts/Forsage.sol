@@ -6,7 +6,7 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Referal.sol";
 
-contract Forsage is Referal {  
+contract Forsage is Referal {
 
   uint[] public prices;
   uint public firstPrice = 5 * 10 ** 18;
@@ -28,7 +28,7 @@ contract Forsage is Referal {
 
   IERC20 public tokenMFS;
 
-  constructor(IERC20 _token, address admin) Referal(admin) {
+  constructor(address admin, IERC20 _token) Referal(admin) {
       /// Set products
       for (uint i = 0; i < 12; i++) {
           products[i] = ((i + 1) % 3 == 0) ? Product.x4 : Product.x3;
