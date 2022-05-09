@@ -5,15 +5,16 @@ pragma solidity >=0.7.0 <0.9.0;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Referal.sol";
+import "./programs/programs.sol";
 
-contract Forsage is Referal {
+contract Forsage is Referal, Programs {
 
   uint[] public prices;
   uint public firstPrice = 5 * 10 ** 18;
 
   enum Product {
-      x3,
-      x4
+      s3,
+      s6
   }
   mapping(uint => Product) public products;
 
@@ -31,7 +32,7 @@ contract Forsage is Referal {
   constructor(address admin, IERC20 _token) Referal(admin) {
       /// Set products
       for (uint i = 0; i < 12; i++) {
-          products[i] = ((i + 1) % 3 == 0) ? Product.x4 : Product.x3;
+          products[i] = ((i + 1) % 3 == 0) ? Product.s6 : Product.s3;
       }
 
       /// Set products prices
@@ -51,17 +52,17 @@ contract Forsage is Referal {
           require(activate[msg.sender][i] == true, "Previous level not activated");
       }
 
-      if (products[lvl] == Product.x3) {
-          updateX3(msg.sender, lvl);
+      if (products[lvl] == Product.s3) {
+          updates3(msg.sender, lvl);
       } else {
-        // updateX4(lvl);
+        // updates6(lvl);
       }
 
       // Activate new lvl
       activate[msg.sender][lvl] = true;
   }
 
-  function updateX3(address _child, uint lvl) isRegistred public returns (address) {
+  function updates3(address _child, uint lvl) isRegistred public returns (address) {
     address _parent = getActivateParent(_child, lvl);
 
     // Increment lastChild
@@ -83,7 +84,7 @@ contract Forsage is Referal {
         _sendDevisionMoney(_parent, _price, 40);
       } else {
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
-        updateX3(_parent, lvl); // update parents product
+        updates3(_parent, lvl); // update parents product
       }
       _parentStruct.slot++;
     }
