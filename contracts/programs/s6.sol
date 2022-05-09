@@ -14,4 +14,8 @@ contract S6 {
   }
 
   mapping (address => mapping(uint => structS6)) public matrixS6; // user -> lvl -> structS3
+
+  constructor() {
+
+  }
 }

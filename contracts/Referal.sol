@@ -3,8 +3,9 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "hardhat/console.sol";
+import "./Core.sol";
 
-contract Referal {
+abstract contract Referal is ForsageCore {
 
   modifier isRegistred {
     require(parent[msg.sender] != address(0), "You are not registred");
@@ -22,13 +23,13 @@ contract Referal {
 
   mapping(address => mapping(uint => bool)) public activate; // user -> lvl -> active
 
-  constructor(address admin) {
+  constructor(){
 
       /// Set first User
-      parent[admin] = admin;
+      parent[msg.sender] = msg.sender;
       users[msg.sender] = User(false,false);
       for (uint i = 0; i < 12; i++) {
-          activate[admin][i] = true;
+          activate[msg.sender][i] = true;
       }
   }
 
@@ -45,6 +46,10 @@ contract Referal {
 
   function getChilds() view external returns(address[] memory) {
     return childs[msg.sender];
+  }
+
+  function _isActive(address _address, uint _lvl) internal view returns(bool) {
+      return activate[_address][_lvl];
   }
 
 }
