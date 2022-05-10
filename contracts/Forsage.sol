@@ -2,14 +2,14 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "hardhat/console.sol";
 import "./programs/S3.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Forsage is S3 {
 
-  constructor(IERC20 _token) {
+  constructor(address _token) {
     /// Set token
-    tokenMFS = _token;
+    tokenMFS = IERC20(_token);
   }
 
   function changeAutoReCycle(bool flag) external {

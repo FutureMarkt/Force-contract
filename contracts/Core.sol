@@ -9,5 +9,4 @@ contract ForsageCore {
 
   IERC20 public tokenMFS;
 
-  
 }

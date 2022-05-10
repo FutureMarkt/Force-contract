@@ -1,7 +1,7 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
-describe("Forsage", function(){
+describe("Contract", function(){
   let acc1, acc2, acc3, acc4, acc5, acc6, acc7, acc8
   let forsage
   let mfs
@@ -15,7 +15,7 @@ describe("Forsage", function(){
 
     // Deploy system contract
     const Forsage = await ethers.getContractFactory("Forsage", acc1)
-    forsage = await Forsage.deploy(acc1.address, mfs.address) // send transaction
+    forsage = await Forsage.deploy(mfs.address) // send transaction
     await forsage.deployed() // transaction done
 
     await mfs.transfer(acc2.address, ethers.utils.parseEther('100'))
@@ -30,16 +30,16 @@ describe("Forsage", function(){
     await forsage.connect(acc5).registration(acc2.address)
   })
 
-  // it ("should be deployed", async function(){
-  //   expect(forsage.address).to.be.properAddress;
-  // })
+  it ("should be deployed", async function(){
+    expect(forsage.address).to.be.properAddress;
+  })
 
-  // it ("first user should be activated", async function(){
-  //   let active
-  //   for (var i = 0; i < 12; i++) {
-  //     expect(await forsage.activate(acc1.address,i)).to.equal(true);
-  //   }
-  // })
+  it ("first user should be activated", async function(){
+    let active
+    for (var i = 0; i < 12; i++) {
+      expect(await forsage.activate(acc1.address,i)).to.equal(true);
+    }
+  })
 
   it ("Get parent", async function(){
     const adminParent = await forsage.getParent()
@@ -60,31 +60,33 @@ describe("Forsage", function(){
     expect(adminChilds[5]).to.equal(acc8.address)
   })
 
-  // it ("Update X3 test", async function(){
-  //   await forsage.changeAutoReCycle(true)
-  //   const parent = await forsage.connect(acc2).updateX3(acc2.address,0)
-  //   await forsage.connect(acc3).updateX3(acc3.address,0)
-  //   await forsage.connect(acc4).updateX3(acc4.address,0)
-  //   await forsage.connect(acc5).updateX3(acc5.address,0)
-  // })
-  //
+  it ("Update X3 test", async function(){
+    await forsage.changeAutoReCycle(true)
+    await mfs.connect(acc2).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    await mfs.connect(acc3).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    const parent = await forsage.connect(acc2).updateS3(acc2.address,0)
+    // await forsage.connect(acc3).updateS3(acc3.address,0)
+    // await forsage.connect(acc4).updateS3(acc4.address,0)
+    // await forsage.connect(acc5).updateS3(acc5.address,0)
+  })
+
   // it ("Buy test", async function(){
   //   await forsage.connect(acc2).registration(acc1.address)
   //   await forsage.connect(acc2).buy(0)
   // })
 
-  it ("Change User settings", async function(){
-    let user = await forsage.users(acc1.address)
-    expect(user.autoReCycle).to.equal(false)
-    expect(user.autoUpgrade).to.equal(false)
-    
-    await forsage.changeAutoReCycle(true)
-    await forsage.changeAutoUpgrade(true)
-
-    user = await forsage.users(acc1.address)
-    expect(user.autoReCycle).to.equal(true)
-    expect(user.autoUpgrade).to.equal(true)
-  })
+  // it ("Change User settings", async function(){
+  //   let user = await forsage.users(acc1.address)
+  //   expect(user.autoReCycle).to.equal(false)
+  //   expect(user.autoUpgrade).to.equal(false)
+  //
+  //   await forsage.changeAutoReCycle(true)
+  //   await forsage.changeAutoUpgrade(true)
+  //
+  //   user = await forsage.users(acc1.address)
+  //   expect(user.autoReCycle).to.equal(true)
+  //   expect(user.autoUpgrade).to.equal(true)
+  // })
 
   // it ("is token set", async function(){
   //   const token = await forsage.tokenMFS()

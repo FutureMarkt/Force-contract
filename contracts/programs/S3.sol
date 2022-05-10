@@ -29,7 +29,7 @@ abstract contract S3 is Programs {
       }
 
       if (products[lvl] == Product.s3) {
-          updates3(msg.sender, lvl);
+          updateS3(msg.sender, lvl);
       } else {
         // updates6(lvl);
       }
@@ -38,7 +38,7 @@ abstract contract S3 is Programs {
       activate[msg.sender][lvl] = true;
   }
 
-  function updates3(address _child, uint lvl) isRegistred public returns (address) {
+  function updateS3(address _child, uint lvl) isRegistred public returns (address) {
     address _parent = getActivateParent(_child, lvl);
 
     // Increment lastChild
@@ -50,7 +50,10 @@ abstract contract S3 is Programs {
 
     // Get price
     uint _price = prices[lvl];
+    console.log('Parent', tokenMFS.balanceOf(msg.sender));
     console.log('Price', _price);
+    console.log('Approve2');
+    console.log('Approve', tokenMFS.allowance(msg.sender, address(this)));
 
 
     // Last Child
@@ -60,7 +63,7 @@ abstract contract S3 is Programs {
         _sendDevisionMoney(_parent, _price, 40);
       } else {
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
-        updates3(_parent, lvl); // update parents product
+        updateS3(_parent, lvl); // update parents product
       }
       _parentStruct.slot++;
     }
