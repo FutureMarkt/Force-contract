@@ -65,17 +65,28 @@ abstract contract S6 is S3 {
 
     } else {
       // set 2 lvl
-      // uint _position = _findEmptySpot(_parentStruct);
-      _parentStruct.childsLvl2.push(address(0));
-      console.log('Position', _parentStruct.childsLvl2[0]);
-      // Find first free spot
-      // Get position and call a function
+      uint _position = _findEmptySpot(_parentStruct);
+      _changePosition(_parent, _price, _parentStruct, _position, lvl);
+
+      // Set child info
+      // Find child
+      address __child;
+      if (_position < 2) {
+        __child = _parentStruct.childsLvl1[_parentStruct.lastChild1 - 1];
+      } else {
+        __child = _parentStruct.childsLvl1[_parentStruct.lastChild1];
+      }
+
+      // Change info
+      structS6 storage _childStruct = matrixS6[__child][lvl];
+      _childStruct.lastChild1++;
+      _childStruct.childsLvl1.push(msg.sender);
     }
 
     return _parent;
   }
 
-  function _findEmptySpot(structS6 memory _parent) pure internal returns(uint _position) {
+  function  _findEmptySpot(structS6 memory _parent) pure internal returns(uint _position) {
     uint _index;
     for(uint i = 0; i < 4; i++) {
       _index = _parent.lastChild2 + i;
@@ -89,7 +100,7 @@ abstract contract S6 is S3 {
 
   function _changePosition(address _parent, uint _price, structS6 storage _parentStruct, uint _position, uint _lvl) internal {
     // check which spot
-    uint _spot = _parentStruct.lastChild2 % 4;
+    uint _spot = _parentStruct.lastChild2 % 4; // THINK BECAUSE DUBLICATE ON SECOND LEVEL
 
 
     // first child in slot
