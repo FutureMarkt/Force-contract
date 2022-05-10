@@ -28,6 +28,10 @@ abstract contract S6 is S3 {
     // Get price
     uint _price = prices[lvl];
 
+    console.log('last',_parentStruct.lastChild1);
+    _parentStruct.lastChild1 = 2;
+    _parentStruct.lastChild2 = 3;
+
 
     // Looking for level
     uint _lastChild1 = _parentStruct.lastChild1;
@@ -45,12 +49,14 @@ abstract contract S6 is S3 {
       // send mfs to parent of my parent
       tokenMFS.transferFrom(msg.sender, _grandpa, _price); // transfer token to parent
       if (_lastChild1 != 0) {
-        _grandpaStruct.position[3] = true;
+        _changePosition3(_grandpaStruct);
+      } else {
+        _changePosition2(_grandpaStruct);
       }
-      if(_grandpaStruct.position[3]) {
-        console.log('Parent');
-      }
-
+    } else {
+      // set 2 lvl
+      uint position = _parentStruct.lastChild2 % 4;
+      console.log('Position', position);
     }
 
     return _parent;
@@ -58,5 +64,13 @@ abstract contract S6 is S3 {
 
   function _getPositionLvl2(structS6 memory _parent) pure internal returns(uint position) {
     position = _parent.lastChild2 % 4;
+  }
+
+  function _changePosition3 (structS6 storage _parent) internal {
+    _parent.position[3] = true;
+  }
+
+  function _changePosition2 (structS6 storage _parent) internal {
+    _parent.position[2] = true;
   }
 }

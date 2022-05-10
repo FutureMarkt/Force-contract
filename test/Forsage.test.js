@@ -34,41 +34,38 @@ describe("Contract", function(){
     expect(forsage.address).to.be.properAddress;
   })
 
-  it ("first user should be activated", async function(){
-    let active
-    for (var i = 0; i < 12; i++) {
-      expect(await forsage.activate(acc1.address,i)).to.equal(true);
-    }
-  })
+  // it ("first user should be activated", async function(){
+  //   let active
+  //   for (var i = 0; i < 12; i++) {
+  //     expect(await forsage.activate(acc1.address,i)).to.equal(true);
+  //   }
+  // })
+  //
+  // it ("Get parent", async function(){
+  //   const adminParent = await forsage.getParent()
+  //   const acc2Parent = await forsage.connect(acc2).getParent()
+  //   const acc4Parent = await forsage.connect(acc4).getParent()
+  //   expect(adminParent).to.equal(acc1.address)
+  //   expect(acc2Parent).to.equal(acc1.address)
+  //   expect(acc4Parent).to.equal(acc2.address)
+  // })
+  //
+  // it ("Get childs", async function(){
+  //   await forsage.connect(acc5).registration(acc1.address)
+  //   await forsage.connect(acc6).registration(acc1.address)
+  //   await forsage.connect(acc7).registration(acc1.address)
+  //   await forsage.connect(acc8).registration(acc1.address)
+  //   const adminChilds = await forsage.getChilds()
+  //   expect(adminChilds[4]).to.equal(acc7.address)
+  //   expect(adminChilds[5]).to.equal(acc8.address)
+  // })
 
-  it ("Get parent", async function(){
-    const adminParent = await forsage.getParent()
-    const acc2Parent = await forsage.connect(acc2).getParent()
-    const acc4Parent = await forsage.connect(acc4).getParent()
-    expect(adminParent).to.equal(acc1.address)
-    expect(acc2Parent).to.equal(acc1.address)
-    expect(acc4Parent).to.equal(acc2.address)
-  })
-
-  it ("Get childs", async function(){
-    await forsage.connect(acc5).registration(acc1.address)
-    await forsage.connect(acc6).registration(acc1.address)
-    await forsage.connect(acc7).registration(acc1.address)
-    await forsage.connect(acc8).registration(acc1.address)
-    const adminChilds = await forsage.getChilds()
-    expect(adminChilds[4]).to.equal(acc7.address)
-    expect(adminChilds[5]).to.equal(acc8.address)
-  })
-
-  it ("Update S3 test", async function(){
-    await forsage.changeAutoReCycle(true)
-    await mfs.connect(acc2).approve(forsage.address, ethers.utils.parseUnits('100.0'))
-    await mfs.connect(acc3).approve(forsage.address, ethers.utils.parseUnits('100.0'))
-    const parent = await forsage.connect(acc2).updateS3(acc2.address,0)
-    // await forsage.connect(acc3).updateS3(acc3.address,0)
-    // await forsage.connect(acc4).updateS3(acc4.address,0)
-    // await forsage.connect(acc5).updateS3(acc5.address,0)
-  })
+  // it ("Update S3 test", async function(){
+  //   await forsage.changeAutoReCycle(true)
+  //   await mfs.connect(acc2).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+  //   await mfs.connect(acc3).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+  //   const parent = await forsage.connect(acc2).updateS3(acc2.address,0)
+  // })
 
   it ("Update S6 test", async function(){
     await forsage.changeAutoReCycle(true)
