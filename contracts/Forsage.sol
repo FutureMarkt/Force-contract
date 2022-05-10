@@ -2,10 +2,9 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "./programs/S3.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./programs/S6.sol";
 
-contract Forsage is S3 {
+contract Forsage is S6 {
 
   constructor(address _token) {
     /// Set token

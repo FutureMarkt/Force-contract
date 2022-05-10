@@ -16,10 +16,6 @@ abstract contract S3 is Programs {
 
   mapping (address => mapping(uint => structS3)) public matrixS3; // user -> lvl -> structS3
 
-  constructor(){
-
-  }
-
   function buy(uint lvl) isRegistred public {
       require(activate[msg.sender][lvl] == false, "This level is already activated");
       // Check if there is enough money
@@ -46,14 +42,9 @@ abstract contract S3 is Programs {
     uint _lastChild = _parentStruct.lastChild;
     _parentStruct.lastChild++;
     _lastChild = _lastChild % 3;
-    console.log("Last Child", _lastChild);
 
     // Get price
     uint _price = prices[lvl];
-    console.log('Parent', tokenMFS.balanceOf(msg.sender));
-    console.log('Price', _price);
-    console.log('Approve2');
-    console.log('Approve', tokenMFS.allowance(msg.sender, address(this)));
 
 
     // Last Child

@@ -60,11 +60,21 @@ describe("Contract", function(){
     expect(adminChilds[5]).to.equal(acc8.address)
   })
 
-  it ("Update X3 test", async function(){
+  it ("Update S3 test", async function(){
     await forsage.changeAutoReCycle(true)
     await mfs.connect(acc2).approve(forsage.address, ethers.utils.parseUnits('100.0'))
     await mfs.connect(acc3).approve(forsage.address, ethers.utils.parseUnits('100.0'))
     const parent = await forsage.connect(acc2).updateS3(acc2.address,0)
+    // await forsage.connect(acc3).updateS3(acc3.address,0)
+    // await forsage.connect(acc4).updateS3(acc4.address,0)
+    // await forsage.connect(acc5).updateS3(acc5.address,0)
+  })
+
+  it ("Update S6 test", async function(){
+    await forsage.changeAutoReCycle(true)
+    await mfs.connect(acc2).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    await mfs.connect(acc3).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    const parent = await forsage.connect(acc2).updateS6(acc2.address,0)
     // await forsage.connect(acc3).updateS3(acc3.address,0)
     // await forsage.connect(acc4).updateS3(acc4.address,0)
     // await forsage.connect(acc5).updateS3(acc5.address,0)
