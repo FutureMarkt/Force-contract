@@ -24,9 +24,20 @@ abstract contract S6 is S3 {
     structS6 storage _parentStruct = matrixS6[_parent][lvl];
     structS6 storage _grandpaStruct = matrixS6[_grandpa][lvl];
 
+    // Set null value
+    if (_parentStruct.lastChild1 == 0) {
+      for(uint i = 0; i < 2; i++){
+        _parentStruct.childsLvl1.push(address(0));
+      }
+
+      for(uint i = 0; i < 4; i++){
+        _parentStruct.childsLvl2.push(address(0));
+      }
+    }
+
     // Get price
     uint _price = prices[lvl];
-    // _parentStruct.lastChild1 = 2;
+    _parentStruct.lastChild1 = 2;
 
 
     // Looking for level
@@ -54,34 +65,22 @@ abstract contract S6 is S3 {
 
     } else {
       // set 2 lvl
-
-      uint _position = _parentStruct.lastChild2 % 4;
-        _changePosition(_grandpa, _price, _grandpaStruct, _position, lvl);
-      console.log('Position', _position);
-
-      // Last child
-      if (_position == 3) {
-
-      }
-
-      // Last child
-      if (_position == 2) {
-      }
-
-      // Last child
-      if (_position == 1) {
-        // check auto upgrade
-        // transfer money to parent
-        // update child 1
-      }
-
-      // Last child
-      if (_position == 0) {
-
-      }
+      // uint _position = _findEmptySpot(_parentStruct);
+      _parentStruct.childsLvl2.push(address(0));
+      console.log('Position', _parentStruct.childsLvl2[0]);
+      // Find first free spot
+      // Get position and call a function
     }
 
     return _parent;
+  }
+
+  function _findEmptySpot(structS6 memory _parent) pure internal returns(uint _position) {
+    uint _index;
+    for(uint i = 0; i < 4; i++) {
+      _index = _parent.lastChild2 + i;
+      if (_parent.childsLvl2[_index] == address(0)) return _index;
+    }
   }
 
   function _getPositionLvl2(structS6 memory _parent) pure internal returns(uint position) {
@@ -127,7 +126,7 @@ abstract contract S6 is S3 {
       if (users[_parent].autoUpgrade) {
         _sendDevisionMoney(_parent, _price, 25);
       } else {
-        _parentStruct.frozenMoneyS3 += _price;
+        _parentStruct.frozenMoneyS6 += _price;
         tokenMFS.transferFrom(msg.sender, address(this), _price);
       }
     }
