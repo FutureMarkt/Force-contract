@@ -30,7 +30,6 @@ abstract contract S6 is S3 {
 
     console.log('last',_parentStruct.lastChild1);
     _parentStruct.lastChild1 = 2;
-    _parentStruct.lastChild2 = 3;
 
 
     // Looking for level
@@ -44,19 +43,56 @@ abstract contract S6 is S3 {
 
     if (cLvl == 1) {
       // set 1 lvl
-      _parentStruct.lastChild1++;
-
       // send mfs to parent of my parent
-      tokenMFS.transferFrom(msg.sender, _grandpa, _price); // transfer token to parent
+      tokenMFS.transferFrom(msg.sender, _grandpa, _price); // transfer token to grandparent
+      _parentStruct.childsLvl1.push(msg.sender); // push new child to parent
       if (_lastChild1 != 0) {
-        _changePosition3(_grandpaStruct);
+        _changePosition(_grandpaStruct, 3);
       } else {
-        _changePosition2(_grandpaStruct);
+        _changePosition(_grandpaStruct, 2);
       }
+
+      _parentStruct.lastChild1++;
     } else {
       // set 2 lvl
-      uint position = _parentStruct.lastChild2 % 4;
-      console.log('Position', position);
+
+      uint _position = _parentStruct.lastChild2 % 4;
+      _changePosition(_grandpaStruct, _position);
+      console.log('Position', _position);
+
+      // Last child
+      if (_position == 3) {
+        // Check autorecycle
+        if (users[_parent].autoReCycle) {
+          _sendDevisionMoney(_parent, _price, 40);
+        } else {
+          tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
+          updateS6(_parent, lvl); // update parents product
+        }
+        _parentStruct.slot++;
+        // transfer money to parent
+      }
+
+      // Last child
+      if (_position == 2) {
+        // check auto upgrade
+        // transfer money to parent
+      }
+
+      // Last child
+      if (_position == 1) {
+        // check auto upgrade
+        // transfer money to parent
+      }
+
+      // Last child
+      if (_position == 0) {
+        tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
+        _parentStruct.childsLvl2.push(msg.sender); // push new child to parent
+      }
+
+
+      _parentStruct.lastChild2++;
     }
 
     return _parent;
@@ -66,11 +102,7 @@ abstract contract S6 is S3 {
     position = _parent.lastChild2 % 4;
   }
 
-  function _changePosition3 (structS6 storage _parent) internal {
-    _parent.position[3] = true;
-  }
-
-  function _changePosition2 (structS6 storage _parent) internal {
-    _parent.position[2] = true;
+  function _changePosition (structS6 storage _parent, uint _position) internal {
+    _parent.position[_position] = true;
   }
 }
