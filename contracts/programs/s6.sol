@@ -38,7 +38,7 @@ abstract contract S6 is S3 {
     uint cLvl = 1;
 
     // Get Lvl, where we will work
-    if (_lastChild1 % 2 == 0 && _lastChild1 != 0) {
+    if (_lastChild1 % 2 == 0 && _lastChild1 != 0 && _parentStruct.slot * 2 != _lastChild1) {
       cLvl = 2;
       // Check slot, if slot * 2 > lc, then level 1
     }
@@ -91,9 +91,9 @@ abstract contract S6 is S3 {
     } else {
       // set 2 lvl
       uint _position = _findEmptySpot(_parentStruct, _parent);
-      _changePosition(_parent, _price, _parentStruct, _position, lvl); // Grandpa
 
       console.log('POsition on vl 2', _position);
+      _changePosition(_parent, _price, _parentStruct, _position, lvl); // Grandpa
 
       // Set child info
       // Find child
@@ -117,7 +117,7 @@ abstract contract S6 is S3 {
     uint _index;
     for(uint i = 0; i < 4; i++) {
       _index = _parentStruct.slot * 4 + i;
-      if (childsS6Lvl2[_parent][_index] == address(0)) return _index;
+      if (childsS6Lvl2[_parent][_index] == address(0)) return i;
     }
   }
 
@@ -131,7 +131,7 @@ abstract contract S6 is S3 {
 
     console.log('Spot', _spot);
 
-
+    console.log('Position+', _position);
     console.log('Position', (_parentStruct.slot * 4) + _position);
     childsS6Lvl2[_parent][(_parentStruct.slot * 4) + _position] = msg.sender;
 
@@ -163,7 +163,7 @@ abstract contract S6 is S3 {
         _parentStruct.frozenMoneyS6 -= _price;
         tokenMFS.transfer(_parent, _price); // transfer frozen money
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer money to parent
-        buy((lvl + 1)); // buy next lvl buy[lvl + 1]
+        //buy((_lvl + 1)); // buy next lvl buy[lvl + 1]
       }
     }
 

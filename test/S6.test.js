@@ -18,18 +18,18 @@ describe("Contract", function(){
     forsage = await Forsage.deploy(mfs.address) // send transaction
     await forsage.deployed() // transaction done
 
-    await mfs.transfer(acc2.address, ethers.utils.parseEther('100'))
-    await mfs.transfer(acc3.address, ethers.utils.parseEther('100'))
-    await mfs.transfer(acc4.address, ethers.utils.parseEther('100'))
-    await mfs.transfer(acc5.address, ethers.utils.parseEther('100'))
-    await mfs.transfer(acc6.address, ethers.utils.parseEther('100'))
+    await mfs.transfer(acc2.address, ethers.utils.parseEther('1000'))
+    await mfs.transfer(acc3.address, ethers.utils.parseEther('1000'))
+    await mfs.transfer(acc4.address, ethers.utils.parseEther('1000'))
+    await mfs.transfer(acc5.address, ethers.utils.parseEther('1000'))
+    await mfs.transfer(acc6.address, ethers.utils.parseEther('1000'))
 
     // Allowance token
     await mfs.connect(acc2).approve(forsage.address, ethers.utils.parseUnits('100.0'))
     await mfs.connect(acc3).approve(forsage.address, ethers.utils.parseUnits('100.0'))
     await mfs.connect(acc4).approve(forsage.address, ethers.utils.parseUnits('100.0'))
     await mfs.connect(acc5).approve(forsage.address, ethers.utils.parseUnits('100.0'))
-    await mfs.connect(acc6).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    await mfs.connect(acc6).approve(forsage.address, ethers.utils.parseUnits('1000.0'))
 
     // set accounts
     await forsage.connect(acc2).registration(acc1.address)
@@ -65,6 +65,22 @@ describe("Contract", function(){
     await forsage.connect(acc6).updateS6(acc6.address,0)
     console.log('Result5', acc6.address)
     console.log('Result5', await forsage.childsS6Lvl2(acc1.address, 3))
+
+    await forsage.connect(acc6).updateS6(acc6.address,0)
+    console.log('Result6', acc6.address)
+    console.log('Result6', await forsage.childsS6Lvl2(acc1.address, 3))
+
+    await forsage.connect(acc6).updateS6(acc6.address,0)
+    console.log('Result7', acc6.address)
+    console.log('Result7', await forsage.childsS6Lvl2(acc1.address, 3))
+
+    await forsage.connect(acc6).updateS6(acc6.address,0)
+    console.log('Result8', acc6.address)
+    console.log('Result8', await forsage.childsS6Lvl2(acc1.address, 3))
+
+    await forsage.connect(acc6).updateS6(acc6.address,0)
+    console.log('Result9', acc6.address)
+    console.log('Result9', await forsage.childsS6Lvl2(acc1.address, 3))
   })
 
 })
