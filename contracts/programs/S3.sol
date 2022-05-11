@@ -8,7 +8,6 @@ import "./Programs.sol";
 abstract contract S3 is Programs {
 
   struct structS3 {
-    address[] childsLvl1;
     uint slot;
     uint lastChild;
     uint frozenMoneyS3;
@@ -16,7 +15,9 @@ abstract contract S3 is Programs {
 
   mapping (address => mapping(uint => structS3)) public matrixS3; // user -> lvl -> structS3
 
-  function buy(uint lvl) isRegistred public {
+  mapping(address => mapping(uint => address[])) public childsS3;
+
+  function buy(uint lvl) isRegistred virtual public {
       require(activate[msg.sender][lvl] == false, "This level is already activated");
       // Check if there is enough money
 
@@ -26,8 +27,6 @@ abstract contract S3 is Programs {
 
       if (products[lvl] == Product.s3) {
           updateS3(msg.sender, lvl);
-      } else {
-        // updates6(lvl);
       }
 
       // Activate new lvl
@@ -68,7 +67,7 @@ abstract contract S3 is Programs {
         // THINK
         tokenMFS.transfer(_parent, _price); // transfer frozen money
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer money to parent
-        buy((lvl + 1)); // buy next lvl buy[lvl + 1]
+        // buy((lvl + 1)); // buy next lvl buy[lvl + 1]
       }
     }
 
@@ -79,13 +78,16 @@ abstract contract S3 is Programs {
         _sendDevisionMoney(_parent, _price, 40);
       } else {
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
-        updateS3(_parent, lvl); // update parents product
+        if (_parent != owner()){
+          updateS3(_parent, lvl); // update parents product
+        }
       }
       _parentStruct.slot++;
     }
 
     // Push new child
-    matrixS3[_parent][lvl].childsLvl1.push(_child);
+    childsS3[_parent][lvl].push(_child);
+    // matrixS3[_parent][lvl].childsLvl1.push(_child);
 
     return _parent;
   }

@@ -17,6 +17,24 @@ abstract contract S6 is S3 {
   mapping(address => address[]) public childsS6Lvl1;
   mapping(address => address[]) public childsS6Lvl2;
 
+  function buy(uint lvl) isRegistred override public {
+      require(activate[msg.sender][lvl] == false, "This level is already activated");
+      // Check if there is enough money
+
+      for (uint i = 0; i < lvl; i++) {
+        require(activate[msg.sender][i] == true, "Previous level not activated");
+      }
+
+      if (products[lvl] == Product.s3) {
+        updateS3(msg.sender, lvl);
+      } else {
+        updateS6(msg.sender, lvl);
+      }
+
+      // Activate new lvl
+      activate[msg.sender][lvl] = true;
+  }
+
   function updateS6(address _child, uint lvl) isRegistred public returns (address) {
     address _parent = getActivateParent(_child, lvl);
     address _grandpa = getActivateParent(_parent, lvl);

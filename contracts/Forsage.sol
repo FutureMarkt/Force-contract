@@ -6,7 +6,7 @@ import "./programs/S6.sol";
 
 contract Forsage is S6 {
 
-  constructor(address _token) {
+  constructor(address _token) Ownable() {
     /// Set token
     tokenMFS = IERC20(_token);
   }
