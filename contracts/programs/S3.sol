@@ -46,19 +46,6 @@ abstract contract S3 is Programs {
     // Get price
     uint _price = prices[lvl];
 
-
-    // Last Child
-    if (_lastChild == 2) {
-      // Check autorecycle
-      if (users[_parent].autoReCycle) {
-        _sendDevisionMoney(_parent, _price, 40);
-      } else {
-        tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
-        updateS3(_parent, lvl); // update parents product
-      }
-      _parentStruct.slot++;
-    }
-
     // First Child
     if (_lastChild == 0) {
       //Check autoUpgrade
@@ -77,10 +64,24 @@ abstract contract S3 is Programs {
         _sendDevisionMoney(_parent, _price, 25);
       } else {
         _parentStruct.frozenMoneyS3 -= _price;
+
+        // THINK
         tokenMFS.transfer(_parent, _price); // transfer frozen money
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer money to parent
-        buy((lvl + 1)); // bue next lvl buy[lvl + 1]
+        buy((lvl + 1)); // buy next lvl buy[lvl + 1]
       }
+    }
+
+    // Last Child
+    if (_lastChild == 2) {
+      // Check autorecycle
+      if (users[_parent].autoReCycle) {
+        _sendDevisionMoney(_parent, _price, 40);
+      } else {
+        tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
+        updateS3(_parent, lvl); // update parents product
+      }
+      _parentStruct.slot++;
     }
 
     // Push new child

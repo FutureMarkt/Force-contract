@@ -27,13 +27,7 @@ abstract contract S6 is S3 {
 
     // Set null value
     if (_parentStruct.lastChild1 == 0) {
-      for(uint i = 0; i < 2; i++){
-        childsS6Lvl1[_parent].push(address(0));
-      }
-
-      for(uint i = 0; i < 4; i++){
-        childsS6Lvl2[_parent].push(address(0));
-      }
+      _setNull(_parent);
     }
 
     // Get price
@@ -138,6 +132,10 @@ abstract contract S6 is S3 {
     console.log('Spot', _spot);
 
 
+    console.log('Position', (_parentStruct.slot * 4) + _position);
+    childsS6Lvl2[_parent][(_parentStruct.slot * 4) + _position] = msg.sender;
+
+
     // first child in slot
     if (_spot == 0) {
       tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
@@ -154,6 +152,21 @@ abstract contract S6 is S3 {
       }
     }
 
+    // third chid
+    if (_spot == 2) {
+      //Check autoUpgrade
+      if (users[_parent].autoUpgrade) {
+        _sendDevisionMoney(_parent, _price, 25);
+      } else {
+
+        // THINK
+        _parentStruct.frozenMoneyS6 -= _price;
+        tokenMFS.transfer(_parent, _price); // transfer frozen money
+        tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer money to parent
+        buy((lvl + 1)); // buy next lvl buy[lvl + 1]
+      }
+    }
+
     // last child in slot
     if (_spot == 3) {
       // Check autorecycle
@@ -164,23 +177,20 @@ abstract contract S6 is S3 {
         updateS6(_parent, _lvl); // update parents product
       }
       _parentStruct.slot++;
-      // update structur to null
-      // update child 2
-    }
-
-    // third chid
-    if (_spot == 2) {
-      //Check autoUpgrade
-      if (users[_parent].autoUpgrade) {
-        _sendDevisionMoney(_parent, _price, 25);
-      } else {
-        _parentStruct.frozenMoneyS6 += _price;
-        tokenMFS.transferFrom(msg.sender, address(this), _price);
-      }
+      _setNull(_parent); // update structur to null
     }
 
     _parentStruct.lastChild2++;
-    childsS6Lvl2[_parent][(_parentStruct.slot * 4) + _position] = msg.sender;
-    console.log('Position', (_parentStruct.slot * 4) + _position);
+  }
+
+  function _setNull(address _parent) internal {
+
+      for(uint i = 0; i < 2; i++){
+        childsS6Lvl1[_parent].push(address(0));
+      }
+
+      for(uint i = 0; i < 4; i++){
+        childsS6Lvl2[_parent].push(address(0));
+      }
   }
 }
