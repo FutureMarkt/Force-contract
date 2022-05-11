@@ -33,7 +33,7 @@ abstract contract S3 is Programs {
       activate[msg.sender][lvl] = true;
   }
 
-  function updateS3(address _child, uint lvl) isRegistred internal returns (address) {
+  function updateS3(address _child, uint lvl) isRegistred internal{
     address _parent = getActivateParent(_child, lvl);
 
     // Increment lastChild
@@ -88,7 +88,5 @@ abstract contract S3 is Programs {
     // Push new child
     childsS3[_parent][lvl].push(_child);
     // matrixS3[_parent][lvl].childsLvl1.push(_child);
-
-    return _parent;
   }
 }
