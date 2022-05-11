@@ -40,24 +40,24 @@ describe("Contract", function(){
   })
 
   it ("Simple update S3 - first child", async function(){
-    await forsage.connect(acc2).updateS3(acc2.address, 0)
+    await forsage.connect(acc2).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 0)).to.equal(acc2.address)
-    
+
     const frozen = await forsage.matrixS3(acc1.address, 0)
     expect(frozen.frozenMoneyS3).to.equal(await forsage.prices(0))
   })
 
   it ("Update S3 test", async function(){
-    await forsage.connect(acc2).updateS3(acc2.address, 0)
+    await forsage.connect(acc2).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 0)).to.equal(acc2.address)
 
-    await forsage.connect(acc3).updateS3(acc3.address, 0)
+    await forsage.connect(acc3).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 1)).to.equal(acc3.address)
 
-    await forsage.connect(acc4).updateS3(acc4.address, 0)
+    await forsage.connect(acc4).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 2)).to.equal(acc4.address)
 
-    await forsage.connect(acc5).updateS3(acc5.address, 0)
+    await forsage.connect(acc5).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 3)).to.equal(acc5.address)
   })
 
