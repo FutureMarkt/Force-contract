@@ -46,6 +46,7 @@ abstract contract S6 is S3 {
     // Get Lvl, where we will work
     if (_lastChild1 % 2 == 0 && _lastChild1 != 0) {
       cLvl = 2;
+      // Check slot, if slot * 2 > lc, then level 1
     }
 
     console.log('Level', cLvl);
@@ -56,52 +57,61 @@ abstract contract S6 is S3 {
       // Parent
       childsS6Lvl1[_parent].push(msg.sender); // push new child to parent
 
-      uint _grandpaLeg = _grandpaStruct.lastChild1 % 2;
-      uint _grandpaPosition;
-
-
-
+      // Set info to parent
       if (_lastChild1 != 0) {
-        // Leg may be only 1, because if leg == 0, then you should be on level 2
-        if (_grandpaLeg == 0) {
-          _grandpaPosition = 1;
-        } else {
-          _grandpaPosition = 3;
-        }
-        console.log('GrandPa Leg', _grandpaPosition);
-        _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
         childsS6Lvl1[_parent][_parentStruct.slot * 2 + 1] = msg.sender;
       } else {
-        if (_grandpaLeg == 0) {
-          _grandpaPosition = 0;
-        } else {
-          _grandpaPosition = 2;
-        }
-        console.log('GrandPa Leg', _grandpaPosition);
-        _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
         childsS6Lvl1[_parent][0] = msg.sender;
       }
 
       _parentStruct.lastChild1++;
 
+      // Set info to grandparent
+      uint _grandpaLeg = _grandpaStruct.lastChild1 % 2;
+      uint _grandpaPosition;
+
+      // check is admin
+      if (_parent != _grandpa){
+        if (_lastChild1 != 0) {
+          // Leg may be only 1, because if leg == 0, then you should be on level 2
+          if (_grandpaLeg == 1) {
+            _grandpaPosition = 1;
+          } else {
+            _grandpaPosition = 3;
+          }
+          console.log('GrandPa Leg', _grandpaPosition);
+          _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
+        } else {
+          if (_grandpaLeg == 1) {
+            _grandpaPosition = 0;
+          } else {
+            _grandpaPosition = 2;
+          }
+          console.log('GrandPa Leg', _grandpaPosition);
+          _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
+        }
+      }
+
+
+
     } else {
       // set 2 lvl
       uint _position = _findEmptySpot(_parentStruct, _parent);
-      _changePosition(_parent, _price, _parentStruct, _position, lvl);
+      _changePosition(_parent, _price, _parentStruct, _position, lvl); // Grandpa
 
-      console.log('Check2', _position);
+      console.log('POsition on vl 2', _position);
 
       // Set child info
       // Find child
       address __child;
       if (_position < 2) {
-        __child = childsS6Lvl1[_parent][_parentStruct.lastChild1 - 1];
+        __child = childsS6Lvl1[_parent][_parentStruct.lastChild1 - 1]; // left leg
       } else {
-        __child = childsS6Lvl1[_parent][_parentStruct.lastChild1];
+        __child = childsS6Lvl1[_parent][_parentStruct.lastChild1]; // Right leg
       }
 
       // Change info
-      structS6 storage _childStruct = matrixS6[__child][lvl];
+      structS6 storage _childStruct = matrixS6[__child][lvl]; // pa
       _childStruct.lastChild1++;
       childsS6Lvl1[__child].push(msg.sender);
     }
@@ -144,6 +154,7 @@ abstract contract S6 is S3 {
       }
     }
 
+    // last child in slot
     if (_spot == 3) {
       // Check autorecycle
       if (users[_parent].autoReCycle) {
@@ -153,10 +164,11 @@ abstract contract S6 is S3 {
         updateS6(_parent, _lvl); // update parents product
       }
       _parentStruct.slot++;
-      // update structur
+      // update structur to null
       // update child 2
     }
 
+    // third chid
     if (_spot == 2) {
       //Check autoUpgrade
       if (users[_parent].autoUpgrade) {

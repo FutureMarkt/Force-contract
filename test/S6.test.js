@@ -45,14 +45,15 @@ describe("Contract", function(){
 
     await forsage.connect(acc3).updateS6(acc3.address,0)
     console.log('Result1', await forsage.childsS6Lvl1(acc1.address, 1))
-    console.log('Result1', await forsage.childsS6Lvl2(acc1.address, 2))
+    console.log('Result1', await forsage.childsS6Lvl2(acc1.address, 3))
 
-    // await forsage.connect(acc4).updateS6(acc4.address,0)
-    // console.log('Result2', await forsage.childsS6Lvl2(acc1.address, 0))
+    await forsage.connect(acc4).updateS6(acc4.address,0)
+    console.log('Result2', await forsage.childsS6Lvl2(acc1.address, 0))
+    console.log('Result2', await forsage.childsS6Lvl2(acc1.address, 0))
 
     // await forsage.connect(acc5).updateS6(acc5.address,0)
-    // console.log('Result2', acc5.address)
-    // console.log('Result2', await forsage.childsS6Lvl2(acc1.address, 1))
+    // console.log('Result3', acc5.address)
+    // console.log('Result3', await forsage.childsS6Lvl2(acc1.address, 2))
   })
 
 })
