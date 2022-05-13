@@ -2,9 +2,9 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "./programs/S6.sol";
+import "./programs/Boost.sol";
 
-contract Forsage is S6 {
+contract Forsage is Boost {
 
   constructor(address _token) Ownable() {
     /// Set token

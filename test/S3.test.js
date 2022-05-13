@@ -40,11 +40,17 @@ describe("Contract", function(){
   })
 
   it ("Simple update S3 - first child", async function(){
+    let start = await mfs.connect(acc2).balanceOf(acc2.address)
+    start = +start
+
     await forsage.connect(acc2).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 0)).to.equal(acc2.address)
 
     const frozen = await forsage.matrixS3(acc1.address, 0)
     expect(frozen.frozenMoneyS3).to.equal(await forsage.prices(0))
+
+
+    const finish = await mfs.connect(acc2).balanceOf(acc2.address)
   })
 
   it ("Update S3 test", async function(){
