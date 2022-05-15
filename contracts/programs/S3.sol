@@ -79,7 +79,7 @@ abstract contract S3 is Programs {
       } else {
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
         if (_parent != owner()){
-          updateS3(_parent, lvl); // update parents product
+          updateS3(msg.sender, lvl); // update parents product
         }
       }
       _parentStruct.slot++;

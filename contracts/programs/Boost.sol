@@ -15,12 +15,13 @@ abstract contract Boost is S6 {
       s31,
       s32,
       s6,
-      s21,
-      s22
+      s2
   }
 
   uint[10] public pricesBoost;
   uint public firstPriceBoost = 10 * 10 ** 18;
+
+  mapping(address => mapping(uint => bool)) public activateBoost; // user -> lvl -> active
 
   constructor(){
     /// Set productsBoost
@@ -28,10 +29,10 @@ abstract contract Boost is S6 {
     productsBoost[1] = ProductBoost.s141;
     productsBoost[2] = productsBoost[7] = ProductBoost.s6;
     productsBoost[3] = ProductBoost.s31;
-    productsBoost[4] = ProductBoost.s21;
+    productsBoost[4] = productsBoost[8] = ProductBoost.s2;
     productsBoost[5] = ProductBoost.s302;
     productsBoost[6] = ProductBoost.s142;
-    productsBoost[8] = ProductBoost.s22;
+    
     /// Set productsBoost prices
     pricesBoost[0] = firstPriceBoost;
     pricesBoost[1] = firstPriceBoost * 8;
