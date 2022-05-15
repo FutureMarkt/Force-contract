@@ -3,14 +3,13 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "hardhat/console.sol";
-import "../Boost.sol";
+import "./S30.sol";
 
-abstract contract S2 is Boost {
+abstract contract S2 is S30 {
 
   struct structS2 {
     uint slot;
     uint lastChild;
-    uint frozenMoneyS3;
   }
 
   mapping (address => mapping(uint => structS2)) public matrixS2; // user -> lvl -> structS3
@@ -22,6 +21,10 @@ abstract contract S2 is Boost {
 
       for (uint i = 0; i < lvl; i++) {
           require(activateBoost[msg.sender][i] == true, "Previous level not activated");
+      }
+
+      if (productsBoost[lvl] == ProductBoost.s30) {
+          updateS30(msg.sender, lvl);
       }
 
       if (productsBoost[lvl] == ProductBoost.s2) {

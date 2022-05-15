@@ -8,8 +8,7 @@ abstract contract Boost is S6 {
   mapping(uint => ProductBoost) public productsBoost;
 
   enum ProductBoost {
-      s301,
-      s302,
+      s30,
       s141,
       s142,
       s31,
@@ -25,14 +24,13 @@ abstract contract Boost is S6 {
 
   constructor(){
     /// Set productsBoost
-    productsBoost[0] = ProductBoost.s301;
+    productsBoost[0] = productsBoost[5] = ProductBoost.s30;
     productsBoost[1] = ProductBoost.s141;
     productsBoost[2] = productsBoost[7] = ProductBoost.s6;
     productsBoost[3] = ProductBoost.s31;
     productsBoost[4] = productsBoost[8] = ProductBoost.s2;
-    productsBoost[5] = ProductBoost.s302;
     productsBoost[6] = ProductBoost.s142;
-    
+
     /// Set productsBoost prices
     pricesBoost[0] = firstPriceBoost;
     pricesBoost[1] = firstPriceBoost * 8;
