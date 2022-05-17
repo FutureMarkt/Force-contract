@@ -40,47 +40,7 @@ describe("S6", function(){
   })
 
   it ("Update S6 test", async function(){
-    await forsage.changeAutoReCycle(true)
-
-    await forsage.connect(acc2).updateS6(acc2.address,0)
-    console.log('Result0', await forsage.childsS6Lvl1(acc1.address, 0))
-    console.log('Result0', await forsage.childsS6Lvl2(acc1.address, 0))
-
-    await forsage.connect(acc3).updateS6(acc3.address,0)
-    console.log('Result1', await forsage.childsS6Lvl1(acc1.address, 1))
-    console.log('Result1', await forsage.childsS6Lvl2(acc1.address, 3))
-
-    await forsage.connect(acc4).updateS6(acc4.address,0)
-    console.log('Result2', await forsage.childsS6Lvl2(acc1.address, 0))
-    console.log('Result2', await forsage.childsS6Lvl2(acc1.address, 0))
-
-    await forsage.connect(acc5).updateS6(acc5.address,0)
-    console.log('Result3', acc5.address)
-    console.log('Result3', await forsage.childsS6Lvl2(acc1.address, 1))
-
-    await forsage.connect(acc6).updateS6(acc6.address,0)
-    console.log('Result4', acc6.address)
-    console.log('Result4', await forsage.childsS6Lvl2(acc1.address, 2))
-
-    await forsage.connect(acc6).updateS6(acc6.address,0)
-    console.log('Result5', acc6.address)
-    console.log('Result5', await forsage.childsS6Lvl2(acc1.address, 3))
-
-    await forsage.connect(acc6).updateS6(acc6.address,0)
-    console.log('Result6', acc6.address)
-    console.log('Result6', await forsage.childsS6Lvl2(acc1.address, 3))
-
-    await forsage.connect(acc6).updateS6(acc6.address,0)
-    console.log('Result7', acc6.address)
-    console.log('Result7', await forsage.childsS6Lvl2(acc1.address, 3))
-
-    await forsage.connect(acc6).updateS6(acc6.address,0)
-    console.log('Result8', acc6.address)
-    console.log('Result8', await forsage.childsS6Lvl2(acc1.address, 3))
-
-    await forsage.connect(acc6).updateS6(acc6.address,0)
-    console.log('Result9', acc6.address)
-    console.log('Result9', await forsage.childsS6Lvl2(acc1.address, 3))
+    await forsage.connect(acc2).updateS30(acc2.address,0)
   })
 
 })

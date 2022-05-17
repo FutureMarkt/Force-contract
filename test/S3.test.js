@@ -1,7 +1,7 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
-describe("Contract", function(){
+describe("S3", function(){
   let acc1, acc2, acc3, acc4, acc5, acc6, acc7, acc8
   let forsage
   let mfs
