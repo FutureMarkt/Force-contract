@@ -2,7 +2,7 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "./S6.sol";
+import "./s6.sol";
 
 abstract contract Boost is S6 {
   mapping(uint => ProductBoost) public productsBoost;

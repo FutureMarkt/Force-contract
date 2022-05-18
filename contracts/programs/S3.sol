@@ -3,7 +3,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "hardhat/console.sol";
-import "./Programs.sol";
+import "./programs.sol";
 
 abstract contract S3 is Programs {
 
