@@ -18,7 +18,7 @@ abstract contract Programs is Referal {
   constructor(){
     /// Set products
     for (uint i = 0; i < 12; i++) {
-        products[i] = ((i + 1) % 3 == 0) ? Product.s6 : Product.s3;
+        products[i] = ((i + 1) % 3 == 0) ? Product.s3 : Product.s6;
     }
 
     /// Set products prices
