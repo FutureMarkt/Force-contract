@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MFS is ERC20, Ownable {
     constructor() ERC20("MFS", "MFS") {
-        _mint(msg.sender, 25000 * 10 ** decimals());
+        _mint(msg.sender, 250000000 * 10 ** decimals());
     }
 
     function mint(address to, uint256 amount) public onlyOwner {

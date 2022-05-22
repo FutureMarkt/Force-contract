@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
   const Forsage = await ethers.getContractFactory("Forsage")
-  forsage = await Forsage.deploy('0x4109918CE2e3fFfDe0EC63a5F8b760a70B960498') // send transaction
+  forsage = await Forsage.deploy('0x66b346B176a83c5708B002EbA8219a92D4DE4579') // send transaction
   await forsage.deployed();
 
   console.log("Forsage deployed to:", forsage.address);

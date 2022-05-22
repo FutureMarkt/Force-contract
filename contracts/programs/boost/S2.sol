@@ -3,9 +3,9 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "hardhat/console.sol";
-import "./S30.sol";
+import "./S301.sol";
 
-abstract contract S2 is S30 {
+abstract contract S2 is S301 {
 
   struct structS2 {
     uint slot;
@@ -15,7 +15,7 @@ abstract contract S2 is S30 {
   mapping (address => mapping(uint => structS2)) public matrixS2; // user -> lvl -> structS3
   mapping(address => mapping(uint => address[])) public childsS2;
 
-  function buyBoost(uint lvl) isRegistred virtual public {
+  /* function buyBoost(uint lvl) isRegistred virtual public {
       require(activateBoost[msg.sender][lvl] == false, "This level is already activated");
       // Check if there is enough money
 
@@ -33,7 +33,7 @@ abstract contract S2 is S30 {
 
       // Activate new lvl
       activateBoost[msg.sender][lvl] = true;
-  }
+  } */
 
   function updateS2(address _child, uint lvl) isRegistred internal{
     address _parent = getActivateParent(_child, lvl);

@@ -14,8 +14,8 @@ abstract contract S6 is S3 {
 
   mapping (address => mapping(uint => structS6)) public matrixS6; // user -> lvl -> structS6
 
-  mapping(address => address[]) public childsS6Lvl1;
-  mapping(address => address[]) public childsS6Lvl2;
+  mapping(address => mapping(uint => address[])) public childsS6Lvl1;
+  mapping(address => mapping(uint => address[])) public childsS6Lvl2;
 
   function buy(uint lvl) isRegistred override public {
       require(activate[msg.sender][lvl] == false, "This level is already activated");
@@ -35,7 +35,7 @@ abstract contract S6 is S3 {
       activate[msg.sender][lvl] = true;
   }
 
-  function updateS6(address _child, uint lvl) isRegistred public returns (address) {
+  function updateS6(address _child, uint lvl) isRegistred internal returns (address) {
     address _parent = getActivateParent(_child, lvl);
     address _grandpa = getActivateParent(_parent, lvl);
 
@@ -45,7 +45,7 @@ abstract contract S6 is S3 {
 
     // Set null value
     if (_parentStruct.lastChild1 == 0) {
-      _setNull(_parent);
+      _setNull(_parent, lvl);
     }
 
     // Get price
@@ -61,19 +61,23 @@ abstract contract S6 is S3 {
       // Check slot, if slot * 2 > lc, then level 1
     }
 
-    console.log('Level', cLvl);
+    // console.log('Level', cLvl);
 
     if (cLvl == 1) {
       // set 1 lvl
 
+      console.log('Level 1', msg.sender);
+      console.log(msg.sender);
+
       // Parent
-      childsS6Lvl1[_parent].push(msg.sender); // push new child to parent
+      
+      //childsS6Lvl1[_parent][lvl].push(msg.sender); // push new child to parent
 
       // Set info to parent
-      if (_lastChild1 != 0) {
-        childsS6Lvl1[_parent][_parentStruct.slot * 2 + 1] = msg.sender;
+      if (childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] == address(0)){
+        childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] = msg.sender;
       } else {
-        childsS6Lvl1[_parent][0] = msg.sender;
+        childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2 + 1] = msg.sender;
       }
 
       _parentStruct.lastChild1++;
@@ -91,7 +95,7 @@ abstract contract S6 is S3 {
           } else {
             _grandpaPosition = 3;
           }
-          console.log('GrandPa Leg', _grandpaPosition);
+          //console.log('GrandPa Leg', _grandpaPosition);
           _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
         } else {
           if (_grandpaLeg == 1) {
@@ -99,7 +103,7 @@ abstract contract S6 is S3 {
           } else {
             _grandpaPosition = 2;
           }
-          console.log('GrandPa Leg', _grandpaPosition);
+          //console.log('GrandPa Leg', _grandpaPosition);
           _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
         }
       }
@@ -108,34 +112,36 @@ abstract contract S6 is S3 {
 
     } else {
       // set 2 lvl
-      uint _position = _findEmptySpot(_parentStruct, _parent);
+      uint _position = _findEmptySpot(_parentStruct, _parent, lvl);
 
-      console.log('POsition on vl 2', _position);
+      //console.log('POsition on vl 2', _position);
       _changePosition(_parent, _price, _parentStruct, _position, lvl); // Grandpa
 
       // Set child info
       // Find child
       address __child;
       if (_position < 2) {
-        __child = childsS6Lvl1[_parent][_parentStruct.lastChild1 - 1]; // left leg
+        console.log('TESTTT', _parentStruct.lastChild1);
+        __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 2]; // left leg
       } else {
-        __child = childsS6Lvl1[_parent][_parentStruct.lastChild1]; // Right leg
+        console.log('TESTTT', _parentStruct.lastChild1);
+        __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 1]; // Right leg
       }
 
       // Change info
       structS6 storage _childStruct = matrixS6[__child][lvl]; // pa
       _childStruct.lastChild1++;
-      childsS6Lvl1[__child].push(msg.sender);
+      childsS6Lvl1[__child][lvl].push(msg.sender);
     }
 
     return _parent;
   }
 
-  function  _findEmptySpot(structS6 memory _parentStruct, address _parent) view internal returns(uint _position) {
+  function  _findEmptySpot(structS6 memory _parentStruct, address _parent, uint _lvl) view internal returns(uint _position) {
     uint _index;
     for(uint i = 0; i < 4; i++) {
       _index = _parentStruct.slot * 4 + i;
-      if (childsS6Lvl2[_parent][_index] == address(0)) return i;
+      if (childsS6Lvl2[_parent][_lvl][_index] == address(0)) return i;
     }
   }
 
@@ -147,11 +153,11 @@ abstract contract S6 is S3 {
     // check which spot
     uint _spot = _parentStruct.lastChild2 % 4; // THINK BECAUSE DUBLICATE ON SECOND LEVEL
 
-    console.log('Spot', _spot);
+    //console.log('Spot', _spot);
 
-    console.log('Position+', _position);
-    console.log('Position', (_parentStruct.slot * 4) + _position);
-    childsS6Lvl2[_parent][(_parentStruct.slot * 4) + _position] = msg.sender;
+    //console.log('Position+', _position);
+    //console.log('Position', (_parentStruct.slot * 4) + _position);
+    childsS6Lvl2[_parent][_lvl][(_parentStruct.slot * 4) + _position] = msg.sender;
 
 
     // first child in slot
@@ -192,23 +198,23 @@ abstract contract S6 is S3 {
         _sendDevisionMoney(_parent, _price, 40);
       } else {
         tokenMFS.transferFrom(msg.sender, _parent, _price); // transfer token to parent
-        updateS6(_parent, _lvl); // update parents product
+        if(_parent != owner()) updateS6(_parent, _lvl); // update parents product
       }
       _parentStruct.slot++;
-      _setNull(_parent); // update structur to null
+      _setNull(_parent, _lvl); // update structur to null
     }
 
     _parentStruct.lastChild2++;
   }
 
-  function _setNull(address _parent) internal {
+  function _setNull(address _parent, uint lvl) internal {
 
       for(uint i = 0; i < 2; i++){
-        childsS6Lvl1[_parent].push(address(0));
+        childsS6Lvl1[_parent][lvl].push(address(0));
       }
 
       for(uint i = 0; i < 4; i++){
-        childsS6Lvl2[_parent].push(address(0));
+        childsS6Lvl2[_parent][lvl].push(address(0));
       }
   }
 }

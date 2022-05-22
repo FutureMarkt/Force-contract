@@ -43,17 +43,19 @@ describe("S3", function(){
     let start = await mfs.connect(acc2).balanceOf(acc2.address)
     start = +start
 
+    
     await forsage.connect(acc2).buy(0)
-    expect(await forsage.childsS3(acc1.address, 0, 0)).to.equal(acc2.address)
+    expect(await forsage.childsS6Lvl1(acc1.address, 0, 0)).to.equal(acc2.address)
 
-    const frozen = await forsage.matrixS3(acc1.address, 0)
-    expect(frozen.frozenMoneyS3).to.equal(await forsage.prices(0))
+    // const frozen = await forsage.matrixS3(acc1.address, 0)
+    // expect(frozen.frozenMoneyS3).to.equal(await forsage.prices(0))
 
 
     const finish = await mfs.connect(acc2).balanceOf(acc2.address)
+    console.log(finish)
   })
 
-  it ("Update S3 test", async function(){
+  /*it ("Update S3 test", async function(){
     await forsage.connect(acc2).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 0)).to.equal(acc2.address)
 
@@ -65,6 +67,6 @@ describe("S3", function(){
 
     await forsage.connect(acc5).buy(0)
     expect(await forsage.childsS3(acc1.address, 0, 3)).to.equal(acc5.address)
-  })
+  }) */
 
 })

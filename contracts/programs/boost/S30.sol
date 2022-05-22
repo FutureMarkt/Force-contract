@@ -2,7 +2,6 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-import "hardhat/console.sol";
 import "../Boost.sol";
 
 abstract contract S30 is Boost {
