@@ -53,11 +53,10 @@ describe("S6", function(){
 
   it ("Simple update S6 - first child", async function(){
     let start = await mfs.connect(acc2).balanceOf(acc2.address)
-    start = +start
+    console.log('Start Balance', ethers.utils.formatUnits(start, "ether"))
 
     let slot = await forsage.matrixS6(acc1.address, 0)
-    console.log('Start slot', slot.slot)
-
+    expect(slot.slot).to.equal(0)
     
     await forsage.connect(acc2).buy(0)
     expect(await forsage.childsS6Lvl1(acc1.address, 0, 0)).to.equal(acc2.address)
@@ -87,11 +86,11 @@ describe("S6", function(){
     expect(await forsage.childsS6Lvl2(acc1.address, 0, 4)).to.equal(acc10.address)
 
     slot = await forsage.matrixS6(acc1.address, 0)
-    console.log('New slot', slot.slot)
+    expect(slot.slot).to.equal(1)
 
 
     const finish = await mfs.connect(acc2).balanceOf(acc2.address)
-    console.log(finish)
+    console.log('Start Balance', ethers.utils.formatUnits(finish, "ether"))
   })
 
   /* it ("Update S6 test", async function(){

@@ -58,21 +58,11 @@ abstract contract S6 is S3 {
     // Get Lvl, where we will work
     if (_lastChild1 % 2 == 0 && _lastChild1 != 0 && _parentStruct.slot * 2 != _lastChild1) {
       cLvl = 2;
-      // Check slot, if slot * 2 > lc, then level 1
     }
 
-    // console.log('Level', cLvl);
-
+    // set 1 lvl
     if (cLvl == 1) {
-      // set 1 lvl
-
-      console.log('Level 1', msg.sender);
-      console.log(msg.sender);
-
       // Parent
-      
-      //childsS6Lvl1[_parent][lvl].push(msg.sender); // push new child to parent
-
       // Set info to parent
       if (childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] == address(0)){
         childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] = msg.sender;
@@ -95,7 +85,6 @@ abstract contract S6 is S3 {
           } else {
             _grandpaPosition = 3;
           }
-          //console.log('GrandPa Leg', _grandpaPosition);
           _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
         } else {
           if (_grandpaLeg == 1) {
@@ -103,28 +92,22 @@ abstract contract S6 is S3 {
           } else {
             _grandpaPosition = 2;
           }
-          //console.log('GrandPa Leg', _grandpaPosition);
           _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
         }
+      } else {
+        tokenMFS.transferFrom(msg.sender, _parent, _price); // send to owner
       }
-
-
-
     } else {
       // set 2 lvl
       uint _position = _findEmptySpot(_parentStruct, _parent, lvl);
-
-      //console.log('POsition on vl 2', _position);
       _changePosition(_parent, _price, _parentStruct, _position, lvl); // Grandpa
 
       // Set child info
       // Find child
       address __child;
       if (_position < 2) {
-        console.log('TESTTT', _parentStruct.lastChild1);
         __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 2]; // left leg
       } else {
-        console.log('TESTTT', _parentStruct.lastChild1);
         __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 1]; // Right leg
       }
 
@@ -152,11 +135,6 @@ abstract contract S6 is S3 {
   function _changePosition(address _parent, uint _price, structS6 storage _parentStruct, uint _position, uint _lvl) internal {
     // check which spot
     uint _spot = _parentStruct.lastChild2 % 4; // THINK BECAUSE DUBLICATE ON SECOND LEVEL
-
-    //console.log('Spot', _spot);
-
-    //console.log('Position+', _position);
-    //console.log('Position', (_parentStruct.slot * 4) + _position);
     childsS6Lvl2[_parent][_lvl][(_parentStruct.slot * 4) + _position] = msg.sender;
 
 
