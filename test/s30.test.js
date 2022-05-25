@@ -1,7 +1,7 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
-describe("S6", function(){
+describe("S30", function(){
   let acc1, acc2, acc3, acc4, acc5, acc6, acc7, acc8
   let forsage
   let mfs
@@ -40,7 +40,7 @@ describe("S6", function(){
   })
 
   it ("Update S6 test", async function(){
-    await forsage.connect(acc2).updateS30(acc2.address,0)
+    await forsage.connect(acc2).buyBoost(0)
   })
 
 })

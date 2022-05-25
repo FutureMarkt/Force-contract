@@ -34,13 +34,13 @@ describe("Contract", function(){
     expect(forsage.address).to.be.properAddress;
   })
 
-  // it ("first user should be activated", async function(){
-  //   let active
-  //   for (var i = 0; i < 12; i++) {
-  //     expect(await forsage.activate(acc1.address,i)).to.equal(true);
-  //   }
-  // })
-  //
+  it ("first user should be activated", async function(){
+    let active
+    for (var i = 0; i < 12; i++) {
+      expect(await forsage.activate(acc1.address,i)).to.equal(true);
+    }
+  })
+  
   it ("Get parent", async function(){
     const adminParent = await forsage.getParent()
     const acc2Parent = await forsage.connect(acc2).getParent()

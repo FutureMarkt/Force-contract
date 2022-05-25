@@ -40,19 +40,27 @@ describe("S3", function(){
   })
 
   it ("Simple update S3 - first child", async function(){
-    let start = await mfs.connect(acc2).balanceOf(acc2.address)
-    start = +start
 
     
     await forsage.connect(acc2).buy(0)
     expect(await forsage.childsS6Lvl1(acc1.address, 0, 0)).to.equal(acc2.address)
+
+    await forsage.connect(acc2).buy(1)
+    expect(await forsage.childsS6Lvl1(acc1.address, 1, 0)).to.equal(acc2.address)
+
+    let start = await mfs.connect(acc2).balanceOf(acc2.address)
+    console.log('Start Balance', ethers.utils.formatUnits(start, "ether"))
+
+    await forsage.connect(acc2).buy(2)
+    expect(await forsage.childsS3(acc1.address, 2, 0)).to.equal(acc2.address)
+    
 
     // const frozen = await forsage.matrixS3(acc1.address, 0)
     // expect(frozen.frozenMoneyS3).to.equal(await forsage.prices(0))
 
 
     const finish = await mfs.connect(acc2).balanceOf(acc2.address)
-    console.log(finish)
+    console.log(ethers.utils.formatUnits(finish, "ether"))
   })
 
   /*it ("Update S3 test", async function(){
