@@ -34,6 +34,7 @@ abstract contract Referal is ForsageCore {
 
   function registration(address _parent) external {
       require(msg.sender != _parent, "You can`t be referal");
+      require(parent[msg.sender] == address(0), "You allready registred");
 
       parent[msg.sender] = _parent;
       childs[_parent].push(msg.sender);

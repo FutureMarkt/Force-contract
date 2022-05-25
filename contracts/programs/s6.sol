@@ -19,6 +19,7 @@ abstract contract S6 is S3 {
 
   function buy(uint lvl) isRegistred override public {
       require(activate[msg.sender][lvl] == false, "This level is already activated");
+      require(lvl < 12, "Wrong level");
       // Check if there is enough money
 
       for (uint i = 0; i < lvl; i++) {

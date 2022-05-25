@@ -23,6 +23,12 @@ describe("Contract", function(){
     await mfs.transfer(acc4.address, ethers.utils.parseEther('100'))
     await mfs.transfer(acc5.address, ethers.utils.parseEther('100'))
 
+    // Allowance token
+    await mfs.connect(acc2).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    await mfs.connect(acc3).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    await mfs.connect(acc4).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+    await mfs.connect(acc5).approve(forsage.address, ethers.utils.parseUnits('100.0'))
+
     // set accounts
     await forsage.connect(acc2).registration(acc1.address)
     await forsage.connect(acc3).registration(acc1.address)
@@ -42,28 +48,24 @@ describe("Contract", function(){
   })
   
   it ("Get parent", async function(){
-    const adminParent = await forsage.getParent()
-    const acc2Parent = await forsage.connect(acc2).getParent()
-    const acc4Parent = await forsage.connect(acc4).getParent()
-    expect(adminParent).to.equal(acc1.address)
-    expect(acc2Parent).to.equal(acc1.address)
-    expect(acc4Parent).to.equal(acc2.address)
+    expect(await forsage.getParent()).to.equal(acc1.address)
+    expect(await forsage.connect(acc2).getParent()).to.equal(acc1.address)
+    expect(await forsage.connect(acc4).getParent()).to.equal(acc2.address)
   })
 
-  // it ("Get childs", async function(){
-  //   await forsage.connect(acc5).registration(acc1.address)
-  //   await forsage.connect(acc6).registration(acc1.address)
-  //   await forsage.connect(acc7).registration(acc1.address)
-  //   await forsage.connect(acc8).registration(acc1.address)
-  //   const adminChilds = await forsage.getChilds()
-  //   expect(adminChilds[4]).to.equal(acc7.address)
-  //   expect(adminChilds[5]).to.equal(acc8.address)
-  // })
+  it ("Get childs", async function(){
+    await forsage.connect(acc5).registration(acc1.address)
+    await forsage.connect(acc6).registration(acc1.address)
+    await forsage.connect(acc7).registration(acc1.address)
+    await forsage.connect(acc8).registration(acc1.address)
+    const adminChilds = await forsage.getChilds()
+    expect(adminChilds[4]).to.equal(acc7.address)
+    expect(adminChilds[5]).to.equal(acc8.address)
+  })
 
-  // it ("Buy test", async function(){
-  //   await forsage.connect(acc2).registration(acc1.address)
-  //   await forsage.connect(acc2).buy(0)
-  // })
+  it ("Buy test", async function(){
+    await forsage.connect(acc2).buy(0)
+  })
 
   // it ("Change User settings", async function(){
   //   let user = await forsage.users(acc1.address)
