@@ -38,48 +38,53 @@ describe("Case1", function(){
     await mfs.connect(acc8).approve(forsage.address, ethers.utils.parseUnits('1000000.0'))
     await mfs.connect(acc9).approve(forsage.address, ethers.utils.parseUnits('1000000.0'))
     await mfs.connect(acc10).approve(forsage.address, ethers.utils.parseUnits('1000000.0'))
-
-    // set accounts
-    await forsage.connect(acc5).registration(acc1.address)
-    await forsage.connect(acc6).registration(acc1.address)
-    await forsage.connect(acc7).registration(acc1.address)
-    await forsage.connect(acc8).registration(acc1.address)
-    await forsage.connect(acc9).registration(acc1.address)
-    await forsage.connect(acc10).registration(acc1.address)
   })
 
   it ("Case", async function(){
     await forsage.connect(acc2).registration(acc1.address)
-    await forsage.connect(acc2).buy(0)
-    await forsage.connect(acc2).buy(1)
-    await forsage.connect(acc2).buy(2)
-    await forsage.connect(acc2).buy(3)
-    await forsage.connect(acc2).buy(4)
-    await forsage.connect(acc2).buy(5)
-    await forsage.connect(acc2).buy(6)
-    await forsage.connect(acc2).buy(7)
-    await forsage.connect(acc2).buy(8)
-    await forsage.connect(acc2).buy(9)
-    await forsage.connect(acc2).buy(10)
-    await forsage.connect(acc2).buy(11)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc2).buy(i)
+    }
 
     await forsage.connect(acc3).registration(acc2.address)
-    //await forsage.connect(acc3).buy(0)
-    //await forsage.connect(acc3).buy(1)
-    //await forsage.connect(acc3).buy(2)
-    //await forsage.connect(acc3).buy(3)
-    //await forsage.connect(acc3).buy(4)
-    //await forsage.connect(acc3).buy(5)
-    //await forsage.connect(acc3).buy(6)
-    //await forsage.connect(acc3).buy(7)
-    //await forsage.connect(acc3).buy(8)
-    //await forsage.connect(acc3).buy(9)
-    //await forsage.connect(acc3).buy(10)
-    //await forsage.connect(acc3).buy(11)
-    //await forsage.connect(acc3).buy(12)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc3).buy(i)
+    }
 
     await forsage.connect(acc4).registration(acc2.address)
-    
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc4).buy(i)
+    } 
+
+    await forsage.connect(acc5).registration(acc3.address)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc5).buy(i)
+    } 
+
+    await forsage.connect(acc6).registration(acc3.address)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc6).buy(i)
+    } 
+
+    await forsage.connect(acc7).registration(acc3.address)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc7).buy(i)
+    } 
+
+    await forsage.connect(acc8).registration(acc3.address)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc8).buy(i)
+    } 
+
+    await forsage.connect(acc9).registration(acc4.address)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc9).buy(i)
+    } 
+
+    await forsage.connect(acc10).registration(acc4.address)
+    for (let i = 0; i < 12; i++) {
+        await forsage.connect(acc10).buy(i)
+    } 
   })
 
 })
