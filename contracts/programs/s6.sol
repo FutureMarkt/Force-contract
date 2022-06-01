@@ -74,7 +74,13 @@ abstract contract S6 is S3 {
       _parentStruct.lastChild1++;
 
       // Set info to grandparent
-      uint _grandpaLeg = _grandpaStruct.lastChild1 % 2;
+      // Looking for free leg
+      uint _grandpaLeg;
+      if (childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] == address(0)){
+        _grandpaStruct.lastChild1 = 0;
+      } else {
+        _grandpaStruct.lastChild1 = 1;
+      }
       uint _grandpaPosition;
 
       // check is admin

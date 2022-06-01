@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SFC is ERC20, Ownable {
-    constructor() ERC20("MFS", "MFS") {
+    constructor() ERC20("SFC", "SFC") {
         _mint(msg.sender, 250000000 * 10 ** decimals());
     }
 
