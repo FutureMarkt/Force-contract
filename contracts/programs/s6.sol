@@ -75,28 +75,24 @@ abstract contract S6 is S3 {
 
       // Set info to grandparent
       // Looking for free leg
-      uint _grandpaLeg;
-      if (childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] != address(0)){
-        _grandpaLeg = 0;
-      } else {
-        _grandpaLeg = 1;
-      }
-
-      console.log('GrandPa', _grandpaLeg);
+      uint _grandpaLeg = _grandpaStruct.lastChild1 % 2;
+      // 1 - left leg
+      // 0 - right leg
+      
       uint _grandpaPosition;
 
       // check is admin
       if (_parent != _grandpa){
         if (_lastChild1 != 0) {
           // Leg may be only 1, because if leg == 0, then you should be on level 2
-          if (_grandpaLeg == 1) {
+          if (_grandpaLeg == 0) {
             _grandpaPosition = 1;
           } else {
             _grandpaPosition = 3;
           }
           _changePosition(_grandpa, _price, _grandpaStruct, _grandpaPosition, lvl); // GrandParent reward
         } else {
-          if (_grandpaLeg == 1) {
+          if (_grandpaLeg == 0) {
             _grandpaPosition = 0;
           } else {
             _grandpaPosition = 2;
