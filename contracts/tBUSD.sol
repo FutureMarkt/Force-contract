@@ -4,8 +4,8 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MFS is ERC20, Ownable {
-    constructor() ERC20("MFS", "MFS") {
+contract tBUSD is ERC20, Ownable {
+    constructor() ERC20("tBUSD", "tBUSD") {
         _mint(msg.sender, 250000000 * 10 ** decimals());
     }
 

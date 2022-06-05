@@ -61,10 +61,14 @@ abstract contract S6 is S3 {
       cLvl = 2;
     }
 
+    console.log('Level', cLvl);
+
     // set 1 lvl
     if (cLvl == 1) {
       // Parent
       // Set info to parent
+      console.log('XXX',_parentStruct.slot * 2 + 1);
+      console.log('XXX1',childsS6Lvl1[_parent][lvl][1]);
       if (childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] == address(0)){
         childsS6Lvl1[_parent][lvl][_parentStruct.slot * 2] = msg.sender;
       } else {
@@ -73,16 +77,25 @@ abstract contract S6 is S3 {
 
       _parentStruct.lastChild1++;
 
-      // Set info to grandparent
-      // Looking for free leg
-      uint _grandpaLeg = _grandpaStruct.lastChild1 % 2;
-      // 1 - left leg
-      // 0 - right leg
-      
-      uint _grandpaPosition;
-
       // check is admin
       if (_parent != _grandpa){
+
+          // Set info to grandparent
+        // Looking for free leg
+        uint _grandpaLeg = _grandpaStruct.lastChild2 % 2;
+        // 1 - left leg
+        // 0 - right leg
+
+        if (childsS6Lvl1[_grandpa][lvl][_parentStruct.slot * 2] == address(0)){ // Use parent slot
+          _grandpaLeg = 0;
+        } else {
+          _grandpaLeg = 1;
+        }
+
+        _grandpaStruct.lastChild2++;
+
+        uint _grandpaPosition;
+
         if (_lastChild1 != 0) {
           // Leg may be only 1, because if leg == 0, then you should be on level 2
           if (_grandpaLeg == 0) {
@@ -111,15 +124,20 @@ abstract contract S6 is S3 {
       // Find child
       address __child;
       if (_position < 2) {
-        __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 2]; // left leg
+        // Left leg
+        __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 2]; 
       } else {
-        __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 1]; // Right leg
+        // Right leg
+        __child = childsS6Lvl1[_parent][lvl][_parentStruct.lastChild1 - 1]; 
       }
 
-      // Change info
+      // Change child info
       structS6 storage _childStruct = matrixS6[__child][lvl]; // pa
+      if (_childStruct.lastChild1 == 0) {
+        _setNull(__child, lvl);
+      }
+      childsS6Lvl1[__child][lvl][_childStruct.lastChild1] = msg.sender;
       _childStruct.lastChild1++;
-      childsS6Lvl1[__child][lvl].push(msg.sender);
     }
 
     return _parent;
@@ -140,7 +158,10 @@ abstract contract S6 is S3 {
   function _changePosition(address _parent, uint _price, structS6 storage _parentStruct, uint _position, uint _lvl) internal {
     // check which spot
     uint _spot = _parentStruct.lastChild2 % 4; // THINK BECAUSE DUBLICATE ON SECOND LEVEL
+    // THINK ABOUT SLOT!
     childsS6Lvl2[_parent][_lvl][(_parentStruct.slot * 4) + _position] = msg.sender;
+
+    console.log('Spot', _spot);
 
 
     // first child in slot

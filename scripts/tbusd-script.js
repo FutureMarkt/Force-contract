@@ -14,7 +14,7 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const MFS = await hre.ethers.getContractFactory("MFS");
+  const MFS = await hre.ethers.getContractFactory("tBUSD");
   const mfs = await MFS.deploy();
 
   await mfs.deployed();

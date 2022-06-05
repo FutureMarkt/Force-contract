@@ -9,7 +9,7 @@ describe("Case1", function(){
     [acc1, acc2, acc3, acc4, acc5, acc6, acc7, acc8, acc9, acc10, acc11] = await ethers.getSigners()
 
     // Deploy token contract
-    const MFS = await ethers.getContractFactory("MFS", acc1)
+    const MFS = await ethers.getContractFactory("tBUSD", acc1)
     mfs = await MFS.deploy() // send transaction
     await mfs.deployed() // transaction done
 
