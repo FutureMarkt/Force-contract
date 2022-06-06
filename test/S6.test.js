@@ -51,40 +51,86 @@ describe("S6", function(){
     await forsage.connect(acc7).registration(acc3.address)
     await forsage.connect(acc8).registration(acc3.address)
     await forsage.connect(acc9).registration(acc5.address)
-    await forsage.connect(acc10).registration(acc1.address)
+    await forsage.connect(acc10).registration(acc3.address)
 
+    let last;
 
+    console.log('------');
+    console.log('Stage2+');
+    console.log('------');
     await forsage.connect(acc2).buy(0)
     expect(await forsage.childsS6Lvl1(acc1.address, 0, 0)).to.equal(acc2.address)
+    last = await forsage.matrixS6(acc1.address, 0)
+    console.log(last.lastChild1)
+    console.log(last.lastChild2)
     
+    console.log('------');
+    console.log('Stage3+');
+    console.log('------');
     await forsage.connect(acc3).buy(0)
     expect(await forsage.childsS6Lvl1(acc1.address, 0, 1)).to.equal(acc3.address)
+    last = await forsage.matrixS6(acc1.address, 0)
+    console.log(last.lastChild1)
+    console.log(last.lastChild2)
     
+    console.log('------');
+    console.log('Stage4+');
+    console.log('------');
     await forsage.connect(acc4).buy(0)
     expect(await forsage.childsS6Lvl1(acc3.address, 0, 0)).to.equal(acc4.address)
     expect(await forsage.childsS6Lvl2(acc1.address, 0, 0)).to.equal(ethers.constants.AddressZero)
     expect(await forsage.childsS6Lvl2(acc1.address, 0, 2)).to.equal(acc4.address)
+    last = await forsage.matrixS6(acc1.address, 0)
+    console.log(last.lastChild1)
+    console.log(last.lastChild2)
     
+    console.log('------');
+    console.log('Stage5');
+    console.log('------');
     await forsage.connect(acc5).buy(0)
     expect(await forsage.childsS6Lvl1(acc3.address, 0, 1)).to.equal(acc5.address)
     expect(await forsage.childsS6Lvl2(acc1.address, 0, 1)).to.equal(ethers.constants.AddressZero)
     expect(await forsage.childsS6Lvl2(acc1.address, 0, 3)).to.equal(acc5.address)
+    last = await forsage.matrixS6(acc1.address, 0)
+    console.log(last.lastChild2)
 
+    console.log('------');
+    console.log('Stage6');
+    console.log('------');
     await forsage.connect(acc6).buy(0)
     expect(await forsage.childsS6Lvl1(acc4.address, 0, 0)).to.equal(acc6.address)
     expect(await forsage.childsS6Lvl2(acc3.address, 0, 0)).to.equal(acc6.address)
+    last = await forsage.matrixS6(acc1.address, 0)
+    console.log(last.lastChild2)
 
+    console.log('------');
+    console.log('Stage');
+    console.log('------');
     await forsage.connect(acc7).buy(0)
     expect(await forsage.childsS6Lvl1(acc4.address, 0, 1)).to.equal(acc7.address)
     expect(await forsage.childsS6Lvl2(acc3.address, 0, 1)).to.equal(acc7.address)
 
+    console.log('------');
+    console.log('Stage');
+    console.log('------');
     await forsage.connect(acc8).buy(0)
     expect(await forsage.childsS6Lvl1(acc5.address, 0, 0)).to.equal(acc8.address)
     expect(await forsage.childsS6Lvl2(acc3.address, 0, 2)).to.equal(acc8.address)
 
+    console.log('------');
+    console.log('Stage');
+    console.log('------');
     await forsage.connect(acc9).buy(0)
     expect(await forsage.childsS6Lvl1(acc5.address, 0, 1)).to.equal(acc9.address)
     expect(await forsage.childsS6Lvl2(acc3.address, 0, 3)).to.equal(acc9.address)
+
+    console.log('------');
+    console.log('Stage');
+    console.log('------');
+    console.log('ADDRESS', await forsage.childsS6Lvl2(acc1.address, 0, 3))
+    await forsage.connect(acc10).buy(0)
+    expect(await forsage.childsS6Lvl1(acc3.address, 0, 2)).to.equal(acc10.address)
+    expect(await forsage.childsS6Lvl2(acc1.address, 0, 6)).to.equal(acc10.address)
   })
 
 })
